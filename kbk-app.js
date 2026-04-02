@@ -412,90 +412,134 @@
     }
   }
 
+  /** Único set de ejemplo en app: Draconyr Pyro. El resto del catálogo público va en data/patimon-catalog.json */
   const DEFAULT_EQUIP = [
     {
-      id: "def-bf-cabeza",
+      id: "def-draco-pyro-cabeza",
       slot: "Cabeza",
-      name: "Corona del Berserker ígneo",
-      setId: "berserker_fuego",
+      name: "Draconyr Pyro — Yelmo escamas ígneas",
+      setId: "draconyr_pyro",
       element: "Fuego",
-      descPiece: "Cuernos carbonizados que canalizan furia controlada.",
-      stats: { HP: 24, SP: 8, STG: 12, DX: 4, VI: 10, MA: 6, EN: 8, AG: 5, LUK: 3 },
-      subStatsDesc: "Sub-stats: +STG y +VI mientras la pieza gana EXP; sin set completo no aplica el bono principal.",
-      setBonus: "Set Berserker (Fuego) completo: +18% daño físico, resistencia a quemadura y sinergia con Nudos de permanencia tipo colapso.",
+      descPiece: "Casco ligero con placas como ascuas alineadas; canaliza calor hacia el golpe sin quemar al portador.",
+      stats: { HP: 22, SP: 10, STG: 14, DX: 5, VI: 10, MA: 8, EN: 8, AG: 6, LUK: 3 },
+      subStatsDesc: "Bonos menores de pieza: STG y MA ígneo al subir EXP con esta pieza equipada.",
+      setBonus: "Set Draconyr Pyro completo: daño ofensivo ígneo elevado; el elemento potencia el conjunto.",
       skill: {
-        name: "Grito magma",
+        name: "Aliento de forja",
         sp: 22,
         cd: 4,
         uses: 2,
-        dmg: "220% STG + 40% MA como ígneo",
-        cond: "Requiere las 4 piezas berserker_fuego equipadas.",
-        desc: "Aúlla y aplica quemadura en área; consume la voluntad acumulada del set.",
+        dmg: "Área: 200% STG + 45% MA como ígneo",
+        cond: "Las 4 piezas draconyr_pyro equipadas.",
+        desc: "Onda de calor; penaliza DEF física enemiga brevemente.",
       },
-      imageUrl: "Patimon/cabeza_berserker.png",
+      imageUrl: "Patimon/placeholder.png",
     },
     {
-      id: "def-bf-cuerpo",
+      id: "def-draco-pyro-cuerpo",
       slot: "Cuerpo",
-      name: "Coraza de ceniza viva",
-      setId: "berserker_fuego",
+      name: "Draconyr Pyro — Coraza horno vivo",
+      setId: "draconyr_pyro",
       element: "Fuego",
-      descPiece: "Placas que brillan como brasas bajo el estrés del combate.",
-      stats: { HP: 40, SP: 10, STG: 8, DX: 6, VI: 18, MA: 5, EN: 14, AG: 4, LUK: 2 },
-      subStatsDesc: "Sub-stats: refuerza VI y EN; acumula cargas de ‘voluntad’ al recibir golpes.",
-      setBonus: "Set Berserker (Fuego) completo: +18% daño físico, resistencia a quemadura y sinergia con Nudos de permanencia tipo colapso.",
+      descPiece: "Peto con núcleo térmico contenido; vibra cuando el combate se alarga.",
+      stats: { HP: 38, SP: 12, STG: 10, DX: 6, VI: 16, MA: 6, EN: 14, AG: 5, LUK: 3 },
+      subStatsDesc: "Bonos menores: VI y EN; aguanta golpes mientras cargas el set.",
+      setBonus: "Set Draconyr Pyro completo: daño ofensivo ígneo elevado; el elemento potencia el conjunto.",
       skill: {
-        name: "Grito magma",
+        name: "Aliento de forja",
         sp: 22,
         cd: 4,
         uses: 2,
-        dmg: "220% STG + 40% MA como ígneo",
-        cond: "Requiere las 4 piezas berserker_fuego equipadas.",
-        desc: "Aúlla y aplica quemadura en área; consume la voluntad acumulada del set.",
+        dmg: "Área: 200% STG + 45% MA como ígneo",
+        cond: "Las 4 piezas draconyr_pyro equipadas.",
+        desc: "Onda de calor; penaliza DEF física enemiga brevemente.",
       },
-      imageUrl: "Patimon/cuerpo_berserker.png",
+      imageUrl: "Patimon/placeholder.png",
     },
     {
-      id: "def-bf-arma",
+      id: "def-draco-pyro-arma",
       slot: "Arma",
-      name: "Hacha ritual ‘Patimin’",
-      setId: "berserker_fuego",
+      name: "Draconyr Pyro — Lanza brasas",
+      setId: "draconyr_pyro",
       element: "Fuego",
-      descPiece: "Filo que deja estelas térmicas al cortar anomalías.",
-      stats: { HP: 10, SP: 6, STG: 22, DX: 10, VI: 6, MA: 4, EN: 6, AG: 8, LUK: 5 },
-      subStatsDesc: "Sub-stats: +STG y +DX; críticos menores si no hay set completo.",
-      setBonus: "Set Berserker (Fuego) completo: +18% daño físico, resistencia a quemadura y sinergia con Nudos de permanencia tipo colapso.",
+      descPiece: "Arma larga con filo que deja estelas de calor; favorece entradas agresivas.",
+      stats: { HP: 12, SP: 8, STG: 24, DX: 11, VI: 8, MA: 5, EN: 6, AG: 8, LUK: 4 },
+      subStatsDesc: "Bonos menores: STG y DX; críticos ligeros si el set no está completo.",
+      setBonus: "Set Draconyr Pyro completo: daño ofensivo ígneo elevado; el elemento potencia el conjunto.",
       skill: {
-        name: "Grito magma",
+        name: "Aliento de forja",
         sp: 22,
         cd: 4,
         uses: 2,
-        dmg: "220% STG + 40% MA como ígneo",
-        cond: "Requiere las 4 piezas berserker_fuego equipadas.",
-        desc: "Aúlla y aplica quemadura en área; consume la voluntad acumulada del set.",
+        dmg: "Área: 200% STG + 45% MA como ígneo",
+        cond: "Las 4 piezas draconyr_pyro equipadas.",
+        desc: "Onda de calor; penaliza DEF física enemiga brevemente.",
       },
-      imageUrl: "Patimon/arma_berserker.png",
+      imageUrl: "Patimon/placeholder.png",
     },
     {
-      id: "def-bf-acc",
+      id: "def-draco-pyro-acc",
       slot: "Accesorio",
-      name: "Brasalete de ascuas",
-      setId: "berserker_fuego",
+      name: "Draconyr Pyro — Broche hornacina",
+      setId: "draconyr_pyro",
       element: "Fuego",
-      descPiece: "Sello que equilibra el calor interno del portador.",
-      stats: { HP: 16, SP: 20, STG: 5, DX: 5, VI: 8, MA: 14, EN: 10, AG: 7, LUK: 8 },
-      subStatsDesc: "Sub-stats: +SP y +MA; regenera un poco de SP al derrotar enemigos menores.",
-      setBonus: "Set Berserker (Fuego) completo: +18% daño físico, resistencia a quemadura y sinergia con Nudos de permanencia tipo colapso.",
+      descPiece: "Sello metálico que armoniza el flujo ígneo entre las cuatro ranuras.",
+      stats: { HP: 14, SP: 22, STG: 6, DX: 5, VI: 8, MA: 16, EN: 9, AG: 7, LUK: 7 },
+      subStatsDesc: "Bonos menores: SP y MA; recupera un poco de SP al derrotar enemigos menores.",
+      setBonus: "Set Draconyr Pyro completo: daño ofensivo ígneo elevado; el elemento potencia el conjunto.",
       skill: {
-        name: "Grito magma",
+        name: "Aliento de forja",
         sp: 22,
         cd: 4,
         uses: 2,
-        dmg: "220% STG + 40% MA como ígneo",
-        cond: "Requiere las 4 piezas berserker_fuego equipadas.",
-        desc: "Aúlla y aplica quemadura en área; consume la voluntad acumulada del set.",
+        dmg: "Área: 200% STG + 45% MA como ígneo",
+        cond: "Las 4 piezas draconyr_pyro equipadas.",
+        desc: "Onda de calor; penaliza DEF física enemiga brevemente.",
       },
-      imageUrl: "Patimon/accesorio_berserker.png",
+      imageUrl: "Patimon/placeholder.png",
+    },
+  ];
+
+  const FLOOR_20_REWARD_SETS = [
+    {
+      id: "draconyr_pyro",
+      label: "Equipamiento especial Draconyr Pyro",
+      desc: "Set ofensivo: el daño bruto es el foco. Según cómo el GM encaje tu elemento en la campaña, el conjunto puede volverse aún más letal.",
+    },
+    {
+      id: "draconyr_gyro",
+      label: "Draconyr Gyro",
+      desc: "Variante ofensiva alineada con velocidad y trueno: golpes encadenados y presión constante. Misma filosofía que Pyro, distinta tonalidad elemental.",
+    },
+    {
+      id: "draconyr_aquno",
+      label: "Draconyr Aquno",
+      desc: "Variante ofensiva fría y fluida: control del campo y desgaste. Ideal si quieres castigar sin ceder terreno.",
+    },
+    {
+      id: "exosister",
+      label: "Exosister",
+      desc: "Para quienes buscan magia elemental pura y sintetizar poderes únicos capaces de borrar amenazas mayores.",
+    },
+    {
+      id: "john",
+      label: "John",
+      desc: "Pensado para jugadores muy exigentes: apuesta fuerte por la suerte y combos raros. También encaja bien en personajes de apoyo que quieran sorprender.",
+    },
+    {
+      id: "luciernaga",
+      label: "Luciérnaga",
+      desc: "Set centrado en sanación y sostener al equipo: prioriza mantener vivos a los demás antes que brillar en el daño.",
+    },
+    {
+      id: "goliath",
+      label: "Goliath",
+      desc: "Si te gusta ser un muro casi impenetrable, absorber golpes y anclar la línea, este es tu estilo.",
+    },
+    {
+      id: "gaga_slayer",
+      label: "Gaga Slayer",
+      desc: "Especialistas en daño a distancia y eliminar objetivos con precisión; asesinos de campo abierto.",
     },
   ];
 
@@ -1448,7 +1492,7 @@
       "</strong> en almacenamiento local. " +
       "Exportación para el repo: <strong>" +
       nExp +
-      "</strong> pieza(s) (sin el set de ejemplo Berserker).";
+      "</strong> pieza(s) (sin el set de ejemplo Draconyr Pyro).";
   }
 
   function fetchPatimonPublicCatalog() {
@@ -2122,6 +2166,86 @@
       localStorage.removeItem(STORAGE_LOTG);
     } catch (e) {}
     lotgState = null;
+  }
+
+  function closeFloor20RewardOverlay() {
+    const ov = document.getElementById("floor20RewardOverlay");
+    if (ov) ov.style.display = "none";
+  }
+
+  function openFloor20RewardFlow() {
+    const ov = document.getElementById("floor20RewardOverlay");
+    const body = document.getElementById("floor20RewardBody");
+    const actions = document.getElementById("floor20RewardActions");
+    const title = document.getElementById("floor20RewardTitle");
+    if (!ov || !body || !actions || !title) {
+      alert("No se encontró la ventana de recompensa del piso 20.");
+      return;
+    }
+    function renderPick() {
+      title.textContent = "¡Felicidades por llegar tan lejos!";
+      body.innerHTML =
+        "<p>Has alcanzado y completado el <strong>piso 20</strong>. Has ganado tu recompensa: elige un <strong>equipamiento especial</strong> para que el GM te lo entregue en la campaña.</p>" +
+        "<p class=\"muted\" style=\"margin-top:0.75rem\">Pulsa un set para leer su descripción y confirmar. Puedes cancelar y volver a esta lista.</p>";
+      actions.innerHTML = "";
+      FLOOR_20_REWARD_SETS.forEach((s) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "primary";
+        b.style.margin = "0.25rem";
+        b.textContent = s.label;
+        b.addEventListener("click", () => renderConfirm(s));
+        actions.appendChild(b);
+      });
+      const stay = document.createElement("button");
+      stay.type = "button";
+      stay.className = "ghost";
+      stay.style.marginTop = "0.5rem";
+      stay.textContent = "Cerrar y seguir en el piso 20";
+      stay.addEventListener("click", () => closeFloor20RewardOverlay());
+      actions.appendChild(stay);
+      ov.style.display = "flex";
+    }
+    function renderConfirm(s) {
+      title.textContent = "Confirmar set";
+      body.innerHTML =
+        "<p><strong>" +
+        escapeHtml(s.label) +
+        "</strong></p><p style=\"margin-top:0.75rem;line-height:1.5\">" +
+        escapeHtml(s.desc) +
+        "</p><p class=\"muted\" style=\"margin-top:0.75rem\">¿Seguro que quieres este set?</p>";
+      actions.innerHTML = "";
+      const ok = document.createElement("button");
+      ok.type = "button";
+      ok.className = "primary";
+      ok.textContent = "Aceptar set";
+      ok.addEventListener("click", () => {
+        closeFloor20RewardOverlay();
+        alert(
+          "Manda una captura al GM del set que elegiste:\n«" +
+            s.label +
+            "»\n\n¡Gracias por participar! Tu partida guardada se borrará para que puedas crear un personaje nuevo desde cero."
+        );
+        const gw = document.getElementById("lotgGameWrap");
+        if (gw) {
+          gw.style.display = "none";
+          gw.innerHTML = "";
+        }
+        lotgWipe();
+        const introEl = document.getElementById("lotgIntro");
+        if (introEl) introEl.style.display = "block";
+        renderLotgCreate();
+        playGlobalClinic();
+      });
+      const back = document.createElement("button");
+      back.type = "button";
+      back.className = "ghost";
+      back.textContent = "Cancelar";
+      back.addEventListener("click", () => renderPick());
+      actions.appendChild(ok);
+      actions.appendChild(back);
+    }
+    renderPick();
   }
 
   function randomZenReward(floor, streak, boss) {
@@ -4928,14 +5052,18 @@
                 lotgState.mapPos = px + "," + py;
                 alert("Falta la reliquia de registro. Sigue explorando eventos en el mapa.");
               } else {
-                lotgState.floor++;
-                lotgState.mapCellTypes = {};
-                lotgState.mapRevealed = {};
-                lotgState.mapCellDone = {};
-                lotgState.mapCellMeta = {};
-                lotgState.mapBossCellKey = null;
-                lotgState.mapPos = "2,2";
-                alert("Avanzas al piso " + lotgState.floor + ". El sector se reconfigura.");
+                if (lotgState.floor === 20) {
+                  openFloor20RewardFlow();
+                } else {
+                  lotgState.floor++;
+                  lotgState.mapCellTypes = {};
+                  lotgState.mapRevealed = {};
+                  lotgState.mapCellDone = {};
+                  lotgState.mapCellMeta = {};
+                  lotgState.mapBossCellKey = null;
+                  lotgState.mapPos = "2,2";
+                  alert("Avanzas al piso " + lotgState.floor + ". El sector se reconfigura.");
+                }
               }
             }
             lotgSave();

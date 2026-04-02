@@ -1113,19 +1113,19 @@
         <h2>Guía rápida — Patimon</h2>
         <div class="tutorial-box">
           <p class="muted" style="margin-top:0">
-            <strong>Independiente de «Legend of the Gathering»:</strong> aquí solo guardas y consultas <em>fichas de equipo Patimon</em> (lista + añadir piezas). No es el inventario del minijuego; eso está en la otra pestaña cuando juegas una partida. Esta guía describe piezas <strong>Patimon</strong> como conjunto especial que refuerza la voluntad de los interventores en el campo.
+            Aquí guardas y consultas las <strong>fichas de equipo Patimon</strong> para tu personaje. Es independiente del inventario del minijuego: lo de la partida está en la pestaña <em>Legend of the Gathering</em>.
           </p>
           <p>
-            Cada pieza puede ganar experiencia en combate. Al subir de nivel, sus estadísticas crecen según el tiempo de uso y el tipo de pieza, y puede desbloquear ramas de habilidad útiles en los <strong>Nudos de permanencia</strong>.
+            Cada pieza puede ganar experiencia en combate y mejorar con el tiempo. En los <strong>Nudos de permanencia</strong> pueden desbloquearse ramas de habilidad según cómo uses el equipo.
           </p>
           <p>
-            Si llevas piezas sueltas de distintos sets, solo aplican los <strong>bonos de sub-stats</strong> (texto breve bajo cada stat). Si completas el <strong>set del mismo tipo y elemento</strong>, se activa el <strong>bono principal del set</strong> y la <strong>habilidad de set completo</strong> descrita en la ficha.
+            Si llevas piezas sueltas de distintos sets, cuentan los bonos menores de cada pieza. Si completas las cuatro piezas del <strong>mismo set y elemento</strong>, se activa el bono fuerte del set y la habilidad de conjunto de la ficha.
           </p>
           <p>
-            Los estilos de set incluyen, entre otros: <em>Berserker, Licántropo, Rey Mago, Dulahand, Goliath, Exosister, Foturnito, Luciérnaga, John</em>. Cada uno ofrece una sinergia distinta; elige según tu estrategia elemental y de rol.
+            Hay muchos estilos de set; cada uno se siente distinto en rol y elemento. Elige lo que encaje con tu personaje.
           </p>
           <p class="muted" style="margin-bottom:0">
-            Usa los filtros para ver por ranura (Cabeza, Cuerpo, Arma, Accesorio). Puedes <strong>añadir</strong> piezas manualmente (imagen + stats + textos) o <strong>eliminar</strong> las que hayas creado tú. Los datos de ejemplo usan imágenes de la carpeta <code>Patimon</code>.
+            Usa los filtros por ranura: Cabeza, Cuerpo, Arma y Accesorio. Puedes <strong>añadir</strong> piezas manualmente o <strong>eliminar</strong> solo las que hayas creado tú.
           </p>
         </div>
       </div>
@@ -1133,7 +1133,7 @@
       <div class="card">
         <h2>Catálogo de equipamiento Patimon</h2>
         <p class="muted" style="margin:0 0 0.75rem">
-          Aquí defines el <strong>equipamiento Patimon</strong>: piezas por ranura (Cabeza, Cuerpo, Arma, Accesorio) con stats y textos de set, pensadas para armar builds y roles de combate en tu mesa o narrativa — independientes del minijuego <em>Legend of the Gathering</em>.
+          Aquí verás todos tus equipos Patimon que puedes elegir y usar en tu ficha al equiparte. Es una vista previa: cuando elijas algo, el GM puede añadírtelos o puedes añadirlos tú manualmente. Hay distintos tipos de set; con el tiempo se irán sumando piezas nuevas.
         </p>
         <div class="patimon-sync-box">
           <div class="btn-row" style="flex-wrap:wrap">
@@ -1160,7 +1160,7 @@
       <div class="card" id="lotgIntro">
         <h2>Legend of the Gathering</h2>
         <p class="muted">
-          Roguelike por turnos: eres un médico en los <strong>Nudos de permanencia</strong>. Dentro del juego tienes pestañas <strong>Exploración</strong> (mapa y combates con fondos de <code>Misc/Backgrounds</code>), <strong>Reclutamiento</strong> (gacha común y premium con arte promocional) e <strong>Historia</strong> (visual novel: prólogo al inicio y capítulos al alcanzar pisos 5, 10, 15 y 20). Al crear personaje recibes <strong>Soul Points</strong> iniciales para el gacha (común ×10 y margen; el premium ×1 cuesta más). Gana más Soul Points en combate, equípate y guarda a menudo. Si caes, pierdes la run actual.
+          Eres un médico contratado para explorar los <strong>Nudos de permanencia</strong> antes de que se expandieran: la acción transcurre años antes de los eventos actuales de KbK y funciona como un <em>spin-off</em>. En este modo explorarás pisos y zonas del nudo, reclutarás unidades para luchar a tu lado y avanzarás poco a poco. Conviene reclutar antes de arriesgarte demasiado en combate. Si mueres, perderás el progreso de esa partida e historia. Tú repartes tus stats al subir de nivel; las unidades reclutadas mejoran solas. Cada combate puede darte <strong>Soul Points</strong> para intentar más reclutas. Los pisos se vuelven más duros conforme avanzas. Puedes leer la historia en su pestaña y <strong>guardar la partida</strong> para continuar después. El proyecto sigue en desarrollo: con un propósito claro, cuando el grupo reúna recursos y unidades, el GM podrá otorgar un equipamiento base especial antes del rol. Dudas al GM. Buena suerte.
         </p>
         <div id="lotgCreateWrap"></div>
       </div>
@@ -1180,9 +1180,9 @@
           <option value="Accesorio">Accesorio</option>
         </select>
         <label>Nombre del set / pieza</label>
-        <input type="text" name="name" required placeholder="Ej. Berserker — Corona ígnea" />
+        <input type="text" name="name" required placeholder="Ej. Draconyr Pyro — Yelmo escamas" />
         <label>ID de set (mismo texto en las 4 piezas para activar bono completo)</label>
-        <input type="text" name="setId" required placeholder="berserker_fuego" />
+        <input type="text" name="setId" required placeholder="draconyr_pyro" />
         <label>Elemento</label>
         <input type="text" name="element" placeholder="Fuego" />
         <label>Imagen (archivo)</label>
@@ -1226,6 +1226,14 @@
       <div class="btn-row" style="margin-top:1rem">
         <button type="button" class="primary" id="vnContinue">Continuar</button>
       </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="floor20RewardOverlay" style="display:none;z-index:220">
+    <div class="modal" style="max-width:560px;max-height:90vh;overflow:auto">
+      <h3 id="floor20RewardTitle" style="margin-top:0">Recompensa — piso 20</h3>
+      <div id="floor20RewardBody" class="muted" style="font-size:0.95rem;line-height:1.55"></div>
+      <div class="btn-row" id="floor20RewardActions" style="margin-top:1rem;flex-wrap:wrap"></div>
     </div>
   </div>
 
