@@ -273,6 +273,9 @@
   ];
 
   const STORAGE_EQUIP = "kbk_equip_custom_v1";
+  /** Catálogo compartido (GitHub Pages): mismo origen que la página. Sustituye el archivo al exportar y hacer commit. */
+  const PATIMON_CATALOG_URL = "data/patimon-catalog.json";
+  let patimonRemoteCatalog = [];
   const STORAGE_LOTG_LEGACY = "lotg_save_v1";
   const STORAGE_LOTG = "lotg_save_v2";
   const LOTG_PROTAG_FALLBACK_DATA_URL =
@@ -1139,8 +1142,106 @@
     }
   }
 
+  /** Fusiona entradas remotas (JSON del repo) y locales (mismo id → gana la local). */
+  function mergePatimonCustomCatalog(remoteArr, localArr) {
+    const m = new Map();
+    (remoteArr || []).forEach((e) => {
+      if (isValidPatimonCatalogEntry(e)) m.set(e.id, e);
+    });
+    (localArr || []).forEach((e) => {
+      if (isValidPatimonCatalogEntry(e)) m.set(e.id, e);
+    });
+    return Array.from(m.values());
+  }
+
   function allEquip() {
-    return DEFAULT_EQUIP.concat(loadCustomEquip());
+    const customMerged = mergePatimonCustomCatalog(patimonRemoteCatalog, loadCustomEquip());
+    return DEFAULT_EQUIP.concat(customMerged);
+  }
+
+  function isDefaultPatimonId(id) {
+    return String(id || "").startsWith("def-");
+  }
+
+  /** Piezas creadas por usuarios (no el set de ejemplo en JS) para el archivo JSON del repositorio. */
+  function getExportablePatimonCatalogForRepo() {
+    return mergePatimonCustomCatalog(patimonRemoteCatalog, loadCustomEquip()).filter((e) => !isDefaultPatimonId(e.id));
+  }
+
+  function downloadPatimonCatalogForGithub() {
+    const filename = "patimon-catalog.json";
+    try {
+      const data = getExportablePatimonCatalogForRepo();
+      const json = JSON.stringify(data, null, 2);
+      /* octet-stream evita que el navegador abra el JSON en pestaña en lugar de descargar */
+      const blob = new Blob([json], { type: "application/octet-stream" });
+
+      if (typeof navigator !== "undefined" && typeof navigator.msSaveBlob === "function") {
+        navigator.msSaveBlob(blob, filename);
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.setAttribute("download", filename);
+      a.download = filename;
+      a.rel = "noopener";
+      a.style.cssText = "position:fixed;left:0;top:0;width:1px;height:1px;opacity:0.01;pointer-events:none;";
+      (document.body || document.documentElement).appendChild(a);
+      if (typeof a.click === "function") {
+        a.click();
+      } else {
+        const ev = document.createEvent("MouseEvents");
+        ev.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        a.dispatchEvent(ev);
+      }
+      setTimeout(function () {
+        if (a.parentNode) a.parentNode.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 8000);
+    } catch (err) {
+      console.error("[Patimon] export", err);
+      alert("No se pudo generar la descarga. Revisa la consola (F12).");
+    }
+  }
+
+  function updatePatimonCatalogStatusUi() {
+    const el = document.getElementById("patimonCatalogStatus");
+    if (!el) return;
+    const nRem = patimonRemoteCatalog.filter(isValidPatimonCatalogEntry).length;
+    const nLoc = loadCustomEquip().filter(isValidPatimonCatalogEntry).length;
+    const nExp = getExportablePatimonCatalogForRepo().length;
+    el.innerHTML =
+      "Catálogo público (archivo <code>data/patimon-catalog.json</code>): <strong>" +
+      nRem +
+      "</strong> pieza(s) cargadas desde el servidor. " +
+      "En este navegador hay <strong>" +
+      nLoc +
+      "</strong> en almacenamiento local. " +
+      "Exportación para el repo: <strong>" +
+      nExp +
+      "</strong> pieza(s) (sin el set de ejemplo Berserker).";
+  }
+
+  function fetchPatimonPublicCatalog() {
+    const url = new URL(PATIMON_CATALOG_URL, window.location.href).href;
+    return fetch(url, { cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          patimonRemoteCatalog = [];
+          return;
+        }
+        patimonRemoteCatalog = data.filter(isValidPatimonCatalogEntry);
+      })
+      .catch((err) => {
+        console.warn("[Patimon] No se pudo cargar el catálogo público (normal si abres el HTML en file:// o falta data/patimon-catalog.json):", err && err.message ? err.message : err);
+        patimonRemoteCatalog = [];
+      });
   }
 
   function buildStatForm() {
@@ -1205,7 +1306,7 @@
     grid.innerHTML = list
       .map((e) => {
         const sk = e.skill || {};
-        const isCustom = !String(e.id || "").startsWith("def-");
+        const isCustom = !isDefaultPatimonId(e.id);
         const subLines = e.subStatLines || {};
         return `
         <article class="equip-card" data-id="${escapeHtml(e.id)}">
@@ -1232,9 +1333,22 @@
     grid.querySelectorAll("[data-del]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-del");
-        if (!confirm("¿Eliminar esta pieza del catálogo local?")) return;
-        const next = loadCustomEquip().filter((x) => x.id !== id);
-        saveCustomEquip(next);
+        if (!confirm("¿Eliminar esta pieza?")) return;
+        const hadLocal = loadCustomEquip().some((x) => x.id === id);
+        if (hadLocal) {
+          const next = loadCustomEquip().filter((x) => x.id !== id);
+          saveCustomEquip(next);
+          renderEquipGrid();
+          updatePatimonCatalogStatusUi();
+          return;
+        }
+        const hadRemote = patimonRemoteCatalog.some((x) => x.id === id);
+        if (hadRemote) {
+          alert(
+            "Esta pieza solo está en el archivo data/patimon-catalog.json del repositorio.\n\nPara quitarla: edita ese JSON en GitHub (o en tu copia local), borra la entrada, exporta de nuevo si hace falta, y sube los cambios con git."
+          );
+          return;
+        }
         renderEquipGrid();
       });
     });
@@ -1345,6 +1459,7 @@
       f.reset();
       buildStatForm();
       renderEquipGrid();
+      updatePatimonCatalogStatusUi();
     };
     if (fileInp.files && fileInp.files[0]) {
       const r = new FileReader();
@@ -4614,8 +4729,43 @@
       buildStatForm();
       renderSlotFilters();
       renderEquipGrid();
+      updatePatimonCatalogStatusUi();
     } catch (e) {
       console.error("[Patimon — catálogo de equipos]", e);
+    }
+    fetchPatimonPublicCatalog()
+      .then(() => {
+        try {
+          renderEquipGrid();
+          updatePatimonCatalogStatusUi();
+        } catch (e2) {
+          console.error(e2);
+        }
+      })
+      .catch(() => {});
+    if (!window.__kbkPatimonCatalogClickBound) {
+      window.__kbkPatimonCatalogClickBound = true;
+      const btnExport = document.getElementById("btnExportPatimonJson");
+      if (btnExport) {
+        btnExport.addEventListener("click", function (e) {
+          e.preventDefault();
+          downloadPatimonCatalogForGithub();
+        });
+      }
+      const btnReload = document.getElementById("btnReloadPatimonCatalog");
+      if (btnReload) {
+        btnReload.addEventListener("click", function (e) {
+          e.preventDefault();
+          fetchPatimonPublicCatalog().then(function () {
+            try {
+              renderEquipGrid();
+              updatePatimonCatalogStatusUi();
+            } catch (err) {
+              console.error(err);
+            }
+          });
+        });
+      }
     }
     try {
       setBodyBg();
@@ -4630,5 +4780,18 @@
       console.error("[Legend of the Gathering — pantalla inicial]", e);
     }
   }
+
+  window.KBK_downloadPatimonCatalog = downloadPatimonCatalogForGithub;
+  window.KBK_reloadPatimonCatalogRemote = function () {
+    return fetchPatimonPublicCatalog().then(function () {
+      try {
+        renderEquipGrid();
+        updatePatimonCatalogStatusUi();
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  };
+
   initApp();
 })();
