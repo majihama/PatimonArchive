@@ -1084,7 +1084,7 @@
       id: "bs_jade_synergy",
       name: "Sinergia contable — mesa de Jade",
       rarity: "S",
-      desc: "Refuerzo de equipo +10% daño durante 4 acciones del doctor. 21 SP, CD 5.",
+      desc: "Refuerzo de equipo +10% daño durante 4 rondas enemigas. 21 SP, CD 5.",
       shopSoul: 985,
       combat: { kind: "buff_team", sp: 21, cd: 5, buffPct: 0.1, buffTurns: 4 },
     },
@@ -1227,11 +1227,362 @@
       combat: { kind: "status_enemy_aoe", sp: 30, cd: 5, coef: 0.35, duration: 3 },
       element: "Neutral",
     },
+    {
+      id: "bs_void_rewrite",
+      name: "Reescritura del vacío — Nihility",
+      rarity: "SSS",
+      desc: "Ola masiva (~1,05× MA); vulnerabilidad implícita vía DoT en horda. 36 SP, CD 6.",
+      shopSoul: 2680,
+      combat: { kind: "dmg_mag_aoe", sp: 36, cd: 6, coef: 1.05 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_binary_stars",
+      name: "Binarias gemelas — dos hostiles",
+      rarity: "SSS",
+      desc: "Dos golpes físicos concentrados; ideal vs élite. 32 SP, CD 5.",
+      shopSoul: 2550,
+      combat: { kind: "phys_double_1", sp: 32, cd: 5, coef1: 1.02, coef2: 0.88 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_glacial_probe",
+      name: "Sonda glacial — res fría",
+      rarity: "SS",
+      desc: "Daño hielo + objetivo recibe +16% daño (3 rondas enemigas). 28 SP, CD 5.",
+      shopSoul: 1680,
+      combat: { kind: "debuff_vuln_1", sp: 28, cd: 5, coef: 0.62, vulnPct: 0.16, vulnTurns: 3 },
+      element: "Hielo",
+    },
+    {
+      id: "bs_ignite_probe",
+      name: "Sonda ígnea — marca de cacería",
+      rarity: "SS",
+      desc: "Impacto ígneo + +14% daño recibido (3 r.). 27 SP, CD 5.",
+      shopSoul: 1620,
+      combat: { kind: "debuff_vuln_1", sp: 27, cd: 5, coef: 0.58, vulnPct: 0.14, vulnTurns: 3 },
+      element: "Fuego",
+    },
+    {
+      id: "bs_volt_chain_mark",
+      name: "Cadena voltaica — marca de torre",
+      rarity: "SS",
+      desc: "Trueno focal + +15% daño (3 r.). 29 SP, CD 5.",
+      shopSoul: 1700,
+      combat: { kind: "debuff_vuln_1", sp: 29, cd: 5, coef: 0.6, vulnPct: 0.15, vulnTurns: 3 },
+      element: "Trueno",
+    },
+    {
+      id: "bs_entropy_tick",
+      name: "Tictac entrópico — sangrado urbano",
+      rarity: "SS",
+      desc: "Daño + DoT por HP máx. (4 rondas enemigas). 31 SP, CD 5.",
+      shopSoul: 1590,
+      combat: { kind: "dot_main", sp: 31, cd: 5, coef: 0.72, dotTurns: 4, dotHpPct: 0.038 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_winds_grace",
+      name: "Gracia de viento — barrido Harmony",
+      rarity: "S",
+      desc: "+18% daño mágico propio (4 rondas enemigas). 19 SP, CD 4.",
+      shopSoul: 920,
+      combat: { kind: "buff_self_mod", sp: 19, cd: 4, physPct: 0, magPct: 0.18, modTurns: 4 },
+    },
+    {
+      id: "bs_iron_stance",
+      name: "Postura de hierro — Preservation",
+      rarity: "S",
+      desc: "+20% daño físico propio (4 r.). 18 SP, CD 4.",
+      shopSoul: 905,
+      combat: { kind: "buff_self_mod", sp: 18, cd: 4, physPct: 0.2, magPct: 0, modTurns: 4 },
+    },
+    {
+      id: "bs_dual_edge",
+      name: "Filo doble — callejón",
+      rarity: "S",
+      desc: "Dos cortes físicos; escala con STG. 24 SP, CD 4.",
+      shopSoul: 980,
+      combat: { kind: "phys_double_1", sp: 24, cd: 4, coef1: 0.88, coef2: 0.74 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_plasma_lance",
+      name: "Lanza plasma — ablation",
+      rarity: "S",
+      desc: "Daño mágico focal (~1,75× MA). 25 SP, CD 4.",
+      shopSoul: 1010,
+      combat: { kind: "dmg_mag_1", sp: 25, cd: 4, coef: 1.75 },
+      element: "Trueno",
+    },
+    {
+      id: "bs_cryo_spike",
+      name: "Punta criogénica",
+      rarity: "S",
+      desc: "Congelación parcial vía daño hielo (~1,72× MA). 24 SP, CD 4.",
+      shopSoul: 990,
+      combat: { kind: "dmg_mag_1", sp: 24, cd: 4, coef: 1.72 },
+      element: "Hielo",
+    },
+    {
+      id: "bs_pyric_lance",
+      name: "Lanza pírica — distrito rojo",
+      rarity: "S",
+      desc: "Ígneo focal (~1,78× MA). 25 SP, CD 4.",
+      shopSoul: 1005,
+      combat: { kind: "dmg_mag_1", sp: 25, cd: 4, coef: 1.78 },
+      element: "Fuego",
+    },
+    {
+      id: "bs_quake_breaker",
+      name: "Rompetierra — demolición",
+      rarity: "S",
+      desc: "Golpe físico brutal (~1,82× STG). 22 SP, CD 4.",
+      shopSoul: 975,
+      combat: { kind: "dmg_phys_1", sp: 22, cd: 4, coef: 1.82 },
+    },
+    {
+      id: "bs_starfall_volley",
+      name: "Lluvia estelar — área",
+      rarity: "S",
+      desc: "Daño mágico a horda (~0,78× MA). 23 SP, CD 4.",
+      shopSoul: 965,
+      combat: { kind: "dmg_mag_aoe", sp: 23, cd: 4, coef: 0.78 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_mending_wave",
+      name: "Ola de sutura — abundancia",
+      rarity: "A",
+      desc: "Curación focal ~24% HP máx. 19 SP, CD 3.",
+      shopSoul: 685,
+      combat: { kind: "heal_1", sp: 19, cd: 3, healPct: 0.24 },
+    },
+    {
+      id: "bs_overclock_slash",
+      name: "Corte overclock",
+      rarity: "A",
+      desc: "Doble tajo físico medio. 21 SP, CD 3.",
+      shopSoul: 695,
+      combat: { kind: "phys_double_1", sp: 21, cd: 3, coef1: 0.72, coef2: 0.6 },
+    },
+    {
+      id: "bs_resonant_mark",
+      name: "Marca resonante — debilidad",
+      rarity: "A",
+      desc: "Daño + +11% recibido (3 r.). 20 SP, CD 4.",
+      shopSoul: 710,
+      combat: { kind: "debuff_vuln_1", sp: 20, cd: 4, coef: 0.48, vulnPct: 0.11, vulnTurns: 3 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_gale_cutter",
+      name: "Cortavientos — Imaginario",
+      rarity: "A",
+      desc: "Área cortante (~0,68× MA). 19 SP, CD 3.",
+      shopSoul: 665,
+      combat: { kind: "dmg_mag_aoe", sp: 19, cd: 3, coef: 0.68 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_fang_rend",
+      name: "Desgarro de colmillo",
+      rarity: "A",
+      desc: "Físico focal (~1,68× STG). 18 SP, CD 3.",
+      shopSoul: 655,
+      combat: { kind: "dmg_phys_1", sp: 18, cd: 3, coef: 1.68 },
+    },
+    {
+      id: "bs_arc_needle",
+      name: "Aguja de arco voltaico",
+      rarity: "A",
+      desc: "Mágico focal (~1,48× MA). 19 SP, CD 3.",
+      shopSoul: 668,
+      combat: { kind: "dmg_mag_1", sp: 19, cd: 3, coef: 1.48 },
+      element: "Trueno",
+    },
+    {
+      id: "bs_blood_price",
+      name: "Precio en sangre — DoT",
+      rarity: "A",
+      desc: "Impacto + hemorragia mágica (3 r.). 22 SP, CD 4.",
+      shopSoul: 720,
+      combat: { kind: "dot_main", sp: 22, cd: 4, coef: 0.55, dotTurns: 3, dotHpPct: 0.035 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_harmony_hum",
+      name: "Tarareo armonioso",
+      rarity: "A",
+      desc: "+12% mág. y +8% fís. (3 r.). 17 SP, CD 4.",
+      shopSoul: 640,
+      combat: { kind: "buff_self_mod", sp: 17, cd: 4, physPct: 0.08, magPct: 0.12, modTurns: 3 },
+    },
+    {
+      id: "bs_rime_slash",
+      name: "Tajo escarchado",
+      rarity: "B",
+      desc: "Físico hielo (~1,38× STG). 15 SP, CD 2.",
+      shopSoul: 455,
+      combat: { kind: "dmg_phys_1", sp: 15, cd: 2, coef: 1.38 },
+      element: "Hielo",
+    },
+    {
+      id: "bs_spark_jab",
+      name: "Golpe de chispa",
+      rarity: "B",
+      desc: "Físico trueno (~1,4× STG). 15 SP, CD 2.",
+      shopSoul: 450,
+      combat: { kind: "dmg_phys_1", sp: 15, cd: 2, coef: 1.4 },
+      element: "Trueno",
+    },
+    {
+      id: "bs_cinder_jab",
+      name: "Punzón ígneo",
+      rarity: "B",
+      desc: "Físico fuego (~1,36× STG). 15 SP, CD 2.",
+      shopSoul: 448,
+      combat: { kind: "dmg_phys_1", sp: 15, cd: 2, coef: 1.36 },
+      element: "Fuego",
+    },
+    {
+      id: "bs_micro_burst",
+      name: "Micro ráfaga cuántica",
+      rarity: "B",
+      desc: "Área leve (~0,52× MA). 14 SP, CD 2.",
+      shopSoul: 430,
+      combat: { kind: "dmg_mag_aoe", sp: 14, cd: 2, coef: 0.52 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_first_aid_sig",
+      name: "Firma de primeros auxilios",
+      rarity: "B",
+      desc: "Cura simple ~18% HP a un aliado o doctor. 14 SP, CD 2.",
+      shopSoul: 425,
+      combat: { kind: "heal_1", sp: 14, cd: 2, healPct: 0.18 },
+    },
+    {
+      id: "bs_tactical_haze",
+      name: "Bruma táctica",
+      rarity: "B",
+      desc: "+10% mág. (3 r.). 13 SP, CD 3.",
+      shopSoul: 418,
+      combat: { kind: "buff_self_mod", sp: 13, cd: 3, physPct: 0, magPct: 0.1, modTurns: 3 },
+    },
+    {
+      id: "bs_grit_overlay",
+      name: "Capa de determinación",
+      rarity: "B",
+      desc: "+12% fís. (3 r.). 13 SP, CD 3.",
+      shopSoul: 415,
+      combat: { kind: "buff_self_mod", sp: 13, cd: 3, physPct: 0.12, magPct: 0, modTurns: 3 },
+    },
+    {
+      id: "bs_bleed_invoice",
+      name: "Factura sangrante",
+      rarity: "B",
+      desc: "DoT focal (3 r.). 16 SP, CD 3.",
+      shopSoul: 468,
+      combat: { kind: "dot_main", sp: 16, cd: 3, coef: 0.35, dotTurns: 3, dotHpPct: 0.032 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_soft_vuln",
+      name: "Vulnerabilidad suave",
+      rarity: "B",
+      desc: "Daño + +9% recibido (2 r.). 15 SP, CD 3.",
+      shopSoul: 440,
+      combat: { kind: "debuff_vuln_1", sp: 15, cd: 3, coef: 0.38, vulnPct: 0.09, vulnTurns: 2 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_twin_needle",
+      name: "Doble aguja — combo corto",
+      rarity: "B",
+      desc: "Dos pinchos físicos ligeros. 16 SP, CD 3.",
+      shopSoul: 462,
+      combat: { kind: "phys_double_1", sp: 16, cd: 3, coef1: 0.58, coef2: 0.52 },
+    },
+    {
+      id: "bs_passive_erudite",
+      name: "Kernel erudito",
+      rarity: "B",
+      desc: "Pasiva: +7% daño mágico.",
+      shopSoul: 510,
+      combat: { kind: "passive", sp: 0, cd: 0 },
+      passiveBonus: { magDmgPct: 0.07 },
+    },
+    {
+      id: "bs_passive_hunt",
+      name: "Instinto de cacería",
+      rarity: "B",
+      desc: "Pasiva: +7% daño físico.",
+      shopSoul: 505,
+      combat: { kind: "passive", sp: 0, cd: 0 },
+      passiveBonus: { physDmgPct: 0.07 },
+    },
+    {
+      id: "bs_passive_fort",
+      name: "Muro de refracción",
+      rarity: "B",
+      desc: "Pasiva: +5% HP máx. y +3% mitigación.",
+      shopSoul: 525,
+      combat: { kind: "passive", sp: 0, cd: 0 },
+      passiveBonus: { hpPct: 0.05, defFlat: 0.03 },
+    },
+    {
+      id: "bs_passive_chain",
+      name: "Sinapsis en cadena",
+      rarity: "A",
+      desc: "Pasiva: +5% mág. y +4% fís.",
+      shopSoul: 620,
+      combat: { kind: "passive", sp: 0, cd: 0 },
+      passiveBonus: { magDmgPct: 0.05, physDmgPct: 0.04 },
+    },
+    {
+      id: "bs_imaginary_lance",
+      name: "Lanza de tercer plano",
+      rarity: "A",
+      desc: "Daño Imaginario focal (~1,52× MA). 20 SP, CD 3.",
+      shopSoul: 678,
+      combat: { kind: "dmg_mag_1", sp: 20, cd: 3, coef: 1.52 },
+      element: "Neutral",
+    },
+    {
+      id: "bs_blizzard_lane",
+      name: "Carril ventisca — área",
+      rarity: "S",
+      desc: "Ventisca a horda (~0,62× MA). 26 SP, CD 4.",
+      shopSoul: 1020,
+      combat: { kind: "dmg_mag_aoe", sp: 26, cd: 4, coef: 0.62 },
+      element: "Hielo",
+    },
+    {
+      id: "bs_inferno_lane",
+      name: "Carril infernal — área",
+      rarity: "S",
+      desc: "Ola ígnea (~0,64× MA). 26 SP, CD 4.",
+      shopSoul: 1035,
+      combat: { kind: "dmg_mag_aoe", sp: 26, cd: 4, coef: 0.64 },
+      element: "Fuego",
+    },
   ];
 
   function getLotgBattleSkill(id) {
     if (!id) return null;
     return LOTG_BATTLE_SKILLS.find((x) => x && x.id === id) || null;
+  }
+
+  /** Precio Soul de tienda con recargo fuerte en S/SS/SSS e inflación leve por compras en la run. */
+  function lotgSkillShopPrice(sk) {
+    if (!sk) return 99999;
+    const base = sk.shopSoul != null ? sk.shopSoul : 480;
+    const tier =
+      sk.rarity === "SSS" ? 3.1 : sk.rarity === "SS" ? 2.45 : sk.rarity === "S" ? 2.05 : sk.rarity === "A" ? 1.55 : sk.rarity === "B" ? 1.32 : 1.12;
+    const purchases = (lotgState && Number(lotgState.shopSoulPurchases)) || 0;
+    const inflation = 1 + Math.min(2.5, purchases * 0.038);
+    return Math.max(200, Math.floor(base * tier * inflation));
   }
 
   /** Quién tiene equipada la técnica (solo una unidad a la vez). */
@@ -1795,6 +2146,7 @@
     });
     if (!s.storyChoiceLog) s.storyChoiceLog = [];
     if (!s.combatBuff || typeof s.combatBuff !== "object") s.combatBuff = { atkMult: 1, turns: 0 };
+    if (!s.protagBattleMods || typeof s.protagBattleMods !== "object") s.protagBattleMods = { physPct: 0, magPct: 0, turns: 0 };
     const r = s.roster || [];
     s.partyUids = (s.partyUids || []).filter((uid) => r.some((u) => u.uid === uid)).slice(0, MAX_PARTY_ALLIES);
     const ruids = new Set(r.map((u) => u.uid));
@@ -2359,18 +2711,31 @@
     return s;
   }
 
-  /** Bonus extra al ATK de combate si hay arma equipada (las stats del arma ya suman al STG/DX/MA). */
-  function equipWeaponDamageMultiplier(slots) {
+  /** Bonus al daño si el arma tiene vínculo exclusivo y el nombre del portador coincide (substring). */
+  function equipUniqueBondMultiplier(weaponPiece, unit) {
+    const ub = weaponPiece && weaponPiece.uniqueBond;
+    if (!ub || !ub.match || !unit) return 1;
+    const nm = String(unit.name || "");
+    if (nm.indexOf(ub.match) < 0) return 1;
+    return 1 + (Number(ub.dmgBonus) || 0);
+  }
+
+  /** Bonus extra al ATK de combate si hay arma equipada (STG/DX/MA del arma pesan más en el multiplicador). */
+  function equipWeaponDamageMultiplier(slots, bondUnit) {
     const w = slots && slots.Arma;
     if (!w) return 1;
     const fp = w.forgePlus != null ? Math.min(10, Math.max(0, Math.floor(Number(w.forgePlus) || 0))) : 0;
-    const forgeMul = fp > 0 ? 1 + fp * 0.035 : 1;
-    if (!w.bonus) return forgeMul;
+    const forgeMul = fp > 0 ? 1 + fp * 0.042 : 1;
+    const bondMul = equipUniqueBondMultiplier(w, bondUnit);
+    if (!w.bonus) return forgeMul * bondMul;
     const b = w.bonus;
-    const n = (Number(b.STG) || 0) + (Number(b.DX) || 0) + (Number(b.MA) || 0);
-    let m = 1.12 + n * 0.014;
-    if (w.qual === "S" || w.qual === "SS" || w.qual === "SSS") m += 0.055;
-    return Math.min(1.62, Math.min(1.45, m) * forgeMul);
+    const stg = Number(b.STG) || 0;
+    const dx = Number(b.DX) || 0;
+    const ma = Number(b.MA) || 0;
+    const n = stg + dx + ma;
+    let m = 1.18 + stg * 0.0065 + dx * 0.0042 + ma * 0.0036 + n * 0.008;
+    if (w.qual === "S" || w.qual === "SS" || w.qual === "SSS") m += 0.072;
+    return Math.min(1.88, Math.min(1.62, m) * forgeMul * bondMul);
   }
 
   function allyConsumableBuffMult(vitals) {
@@ -2446,12 +2811,20 @@
 
   function damageToEnemyPhysical(raw, e) {
     const mit = enemyMitigationPhys(e);
-    return Math.max(1, Math.floor(raw * (1 - mit)));
+    let dmg = Math.max(1, Math.floor(raw * (1 - mit)));
+    if (e && e.lotgVulnerable && (e.lotgVulnerable.turns || 0) > 0) {
+      dmg = Math.floor(dmg * (1 + (e.lotgVulnerable.pct || 0)));
+    }
+    return Math.max(1, dmg);
   }
 
   function damageToEnemyMagical(raw, e) {
     const mit = enemyMitigationMag(e);
-    return Math.max(1, Math.floor(raw * (1 - mit)));
+    let dmg = Math.max(1, Math.floor(raw * (1 - mit)));
+    if (e && e.lotgVulnerable && (e.lotgVulnerable.turns || 0) > 0) {
+      dmg = Math.floor(dmg * (1 + (e.lotgVulnerable.pct || 0)));
+    }
+    return Math.max(1, dmg);
   }
 
   /**
@@ -2459,13 +2832,21 @@
    * físico ≈ atkP × mult × variación; mágico ≈ atkM × mult × variación (ligeramente más alto en coef).
    */
   function lotgProtagPhysicalRaw(cs, atkMult, buffMult) {
-    const m = (atkMult || 1) * (buffMult || 1) * 1.07;
+    let stance = 1;
+    if (lotgState && lotgState.protagBattleMods && (lotgState.protagBattleMods.turns || 0) > 0) {
+      stance += lotgState.protagBattleMods.physPct || 0;
+    }
+    const m = (atkMult || 1) * (buffMult || 1) * 1.07 * stance;
     return cs.atkP * m * (0.94 + Math.random() * 0.3);
   }
 
   function lotgProtagMagicalRaw(cs, atkMult, buffMult, skillCoef) {
     const c = skillCoef != null ? skillCoef : 1.35;
-    const m = (atkMult || 1) * (buffMult || 1) * 1.07;
+    let stance = 1;
+    if (lotgState && lotgState.protagBattleMods && (lotgState.protagBattleMods.turns || 0) > 0) {
+      stance += lotgState.protagBattleMods.magPct || 0;
+    }
+    const m = (atkMult || 1) * (buffMult || 1) * 1.07 * stance;
     return cs.atkM * c * m * (1.08 + Math.random() * 0.32);
   }
 
@@ -2528,7 +2909,7 @@
     const baseDef = 3 + (st.VI || 0) + (st.EN || 0) * 0.75 + (st.DX || 0) * 0.25;
     const rareAmp =
       u.rarity === "SSS" ? 1.1 : u.rarity === "SS" ? 1.078 : u.rarity === "S" ? 1.058 : u.rarity === "A" ? 1.04 : 1.025;
-    const wpn = equipWeaponDamageMultiplier(u.equipSlots || {});
+    const wpn = equipWeaponDamageMultiplier(u.equipSlots || {}, u);
     const pb = sumLotgEquippedPassivesForUnit(u);
     const sl = (lotgState && lotgState.socialLinks && lotgState.socialLinks[u.uid]) || {};
     const linkLv = Math.min(10, Math.max(0, Math.floor(Number(sl.level) || 0)));
@@ -2564,7 +2945,10 @@
   function computeAllyDamage(u, e, extraMult) {
     const em = (extraMult || 1) * 1.06;
     const st = allyCombatStats(u);
-    const raw = st.atkP * (0.96 + Math.random() * 0.28) * 1.1 * em;
+    const v = lotgState && lotgState.combatAllyVitals && lotgState.combatAllyVitals[u.uid];
+    let stance = 1;
+    if (v && v.battleMods && (v.battleMods.turns || 0) > 0) stance += v.battleMods.physPct || 0;
+    const raw = st.atkP * (0.96 + Math.random() * 0.28) * 1.1 * em * stance;
     let dmg = damageToEnemyPhysical(raw, e);
     dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", e.element || "Neutral"));
     return Math.max(1, dmg);
@@ -2924,6 +3308,50 @@
     return { merged: false, name: nu.name, rarity: nu.rarity };
   }
 
+  /** Armas temáticas con bonificación extra si el nombre del portador contiene el substring (estilo «light cone» / arma firma). */
+  const LOTG_UNIQUE_WEAPONS = [
+    {
+      eid: "uw-photon-lane",
+      name: "Cañón de fotones — carril 7",
+      equipSlot: "Arma",
+      qual: "SS",
+      bonus: { STG: 14, MA: 12, DX: 6, SP: 5 },
+      urbanTag: true,
+      uniqueBond: { match: "Kiyama", dmgBonus: 0.14 },
+      bondDesc: "Si el portador lleva «Kiyama» en el nombre: +14% daño con armas y técnicas; aliados Fuego reciben +6% curación cuando curás desde el mapa.",
+    },
+    {
+      eid: "uw-stellar-needle",
+      name: "Aguja estelar — sutura orbital",
+      equipSlot: "Arma",
+      qual: "SS",
+      bonus: { MA: 18, SP: 10, HP: 6, VI: 4 },
+      urbanTag: true,
+      uniqueBond: { match: "Hanazawa", dmgBonus: 0.12 },
+      bondDesc: "Si el portador lleva «Hanazawa» en el nombre: +12% daño mágico; tus DoT aplican +1 ronda en combate LOTG.",
+    },
+    {
+      eid: "uw-thunder-rail",
+      name: "Riél trueno — metro fantasma",
+      equipSlot: "Arma",
+      qual: "S",
+      bonus: { STG: 16, DX: 10, AG: 8 },
+      urbanTag: true,
+      uniqueBond: { match: "Akamine", dmgBonus: 0.11 },
+      bondDesc: "Si el portador lleva «Akamine» en el nombre: +11% daño físico; +4% probabilidad de crítico en ataques básicos.",
+    },
+    {
+      eid: "uw-aonix-grua",
+      name: "Módulo Aónix — grúa clínica (firma)",
+      equipSlot: "Arma",
+      qual: "SSS",
+      bonus: { STG: 10, MA: 20, SP: 14, LUK: 5 },
+      urbanTag: true,
+      uniqueBond: { match: "Ceci", dmgBonus: 0.1 },
+      bondDesc: "Pensado para el doctor protagonista si su nombre contiene «Ceci»: +10% daño mágico del técnica en área y +5% SP máx. efectivo en combate.",
+    },
+  ];
+
   function randomEquipItem() {
     const qual = Math.random() < 0.32 ? "S" : "A";
     const urban = {
@@ -3145,7 +3573,7 @@
     const merged = mergeStatsWithEquipSlots(p.stats || {}, lotgState.equipSlots || {});
     const base = protagCombatStats({ ...p, stats: merged });
     const ab = allyBonusFromParty();
-    const wpn = equipWeaponDamageMultiplier(lotgState.equipSlots || {});
+    const wpn = equipWeaponDamageMultiplier(lotgState.equipSlots || {}, lotgState.protag);
     const pb = sumLotgEquippedPassivesProtag();
     const hpM = 1 + ab.hp + (pb.hpPct || 0);
     const atkM1 = (1 + ab.atk) * wpn * (1 + (pb.physDmgPct || 0));
@@ -3466,14 +3894,35 @@
   }
 
   function lotgRollSkillShopOffer() {
-    const a = LOTG_BATTLE_SKILLS.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const t = a[i];
-      a[i] = a[j];
-      a[j] = t;
-    }
-    return a.slice(0, 4);
+    const pool = LOTG_BATTLE_SKILLS.filter((x) => x && x.id);
+    const pickN = (arr, n, out, ex) => {
+      const sh = arr.slice();
+      for (let i = sh.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = sh[i];
+        sh[i] = sh[j];
+        sh[j] = t;
+      }
+      for (let i = 0; i < sh.length && out.length < n; i++) {
+        if (!ex.has(sh[i].id)) {
+          ex.add(sh[i].id);
+          out.push(sh[i]);
+        }
+      }
+    };
+    const ex = new Set();
+    const out = [];
+    pickN(
+      pool.filter((s) => s.rarity === "SSS" || s.rarity === "SS"),
+      1,
+      out,
+      ex
+    );
+    pickN(pool.filter((s) => s.rarity === "S"), 1, out, ex);
+    pickN(pool.filter((s) => s.rarity === "A"), 2, out, ex);
+    pickN(pool.filter((s) => s.rarity === "B"), 2, out, ex);
+    pickN(pool, 6 - out.length, out, ex);
+    return out.slice(0, 6);
   }
 
   function buildRotatingItemShopStock() {
@@ -3548,12 +3997,16 @@
       statTurns: 5,
     });
     for (let g = 0; g < 3; g++) {
-      const eq = randomEquipItem();
+      const eq =
+        g === 0 && Math.random() < 0.22
+          ? LOTG_UNIQUE_WEAPONS[Math.floor(Math.random() * LOTG_UNIQUE_WEAPONS.length)]
+          : randomEquipItem();
+      const bondLine = eq.uniqueBond && eq.bondDesc ? " · " + eq.bondDesc : "";
       stock.push({
         id: "g-" + roll + "-" + g,
         name: eq.name + " (oferta)",
-        detail: (eq.equipSlot || "?") + " · " + formatEquipBonusLine(eq),
-        price: 320 + Math.floor(Math.random() * 220) + (eq.qual === "S" ? 80 : 0),
+        detail: (eq.equipSlot || "?") + " · " + formatEquipBonusLine(eq) + bondLine,
+        price: 320 + Math.floor(Math.random() * 220) + (eq.qual === "S" ? 80 : 0) + (eq.qual === "SS" ? 260 : 0) + (eq.qual === "SSS" ? 520 : 0),
         gearObj: eq,
       });
     }
@@ -3630,7 +4083,9 @@
     const desc = document.getElementById("shopDesc");
     if (!ov || !body || !lotgState) return;
     if (title) title.textContent = "Tienda de técnicas (Soul)";
-    if (desc) desc.textContent = "Ofertas que rotan al visitar. Compra con Soul Points; luego equípalas (máx. 4).";
+    if (desc)
+      desc.textContent =
+        "6 técnicas distintas por visita (mezcla de rarezas). Precios altos en S/SS/SSS y suben un poco con cada compra en la run. Equipa máx. 4 por personaje.";
     if (mapCellKey) lotgState._shopFromCellKey = mapCellKey;
     normalizeSoulPointsOnState(lotgState);
     const offers = lotgRollSkillShopOffer();
@@ -3639,11 +4094,12 @@
       let html = "<p><strong>Soul Points:</strong> " + sp + "</p><ul style='list-style:none;padding:0'>";
       offers.forEach((sk) => {
         const own = (lotgState.ownedSkillIds || []).includes(sk.id);
+        const price = lotgSkillShopPrice(sk);
         html += `<li style="margin:0.55rem 0;padding:0.5rem;border-radius:10px;border:1px solid rgba(255,105,180,0.35);background:rgba(80,20,60,0.2)">
           <div style="font-weight:600">${escapeHtml(sk.name)} <span class="slot-equip-tag">${escapeHtml(sk.rarity)}</span></div>
           <div class="muted" style="font-size:0.76rem;margin:0.25rem 0;line-height:1.4">${escapeHtml(sk.desc)}</div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.35rem">
-            <span><strong>${sk.shopSoul}</strong> SP</span>
+            <span><strong>${price}</strong> SP</span>
             <button type="button" class="ghost shop-skill-buy" data-skill-id="${escapeHtml(sk.id)}" ${own ? "disabled" : ""}>${own ? "Ya en colección" : "Comprar"}</button>
           </div></li>`;
       });
@@ -3656,14 +4112,15 @@
           const sk = getLotgBattleSkill(sid);
           if (!sk) return;
           normalizeSoulPointsOnState(lotgState);
-          if (lotgState.soul < sk.shopSoul) {
+          const price = lotgSkillShopPrice(sk);
+          if (lotgState.soul < price) {
             alert("No tienes suficientes Soul Points.");
             return;
           }
-          lotgState.soul -= sk.shopSoul;
+          lotgState.soul -= price;
           if (!Array.isArray(lotgState.ownedSkillIds)) lotgState.ownedSkillIds = [];
           if (!lotgState.ownedSkillIds.includes(sk.id)) lotgState.ownedSkillIds.push(sk.id);
-          pushShopPurchaseLog("Técnica: " + sk.name + " · −" + sk.shopSoul + " SP");
+          pushShopPurchaseLog("Técnica: " + sk.name + " · −" + price + " SP");
           lotgSave();
           render();
         });
@@ -3912,10 +4369,12 @@
         consumableBuffMult: 1,
         consumableBuffTurns: 0,
         extraSkillCd: {},
+        battleMods: { physPct: 0, magPct: 0, turns: 0 },
         ailments: emptyAilments(),
       };
     });
     lotgState.protagExtraSkillCd = {};
+    lotgState.protagBattleMods = { physPct: 0, magPct: 0, turns: 0 };
     lotgState.protagAilments = emptyAilments();
     const stg = lotgState.stagingAllyItemBuff;
     if (stg && stg.uid && lotgState.combatAllyVitals[stg.uid]) {
@@ -4030,26 +4489,13 @@
     }
   }
 
-  function tickCombatRoundStart() {
-    if (!lotgState || !lotgState.combatAllyVitals) return;
-    if (lotgState.combatBuff && lotgState.combatBuff.turns > 0) {
-      lotgState.combatBuff.turns--;
-      if (lotgState.combatBuff.turns <= 0) lotgState.combatBuff.atkMult = 1;
-    }
-    getPartyUnits().forEach((u) => {
-      const v = lotgState.combatAllyVitals && lotgState.combatAllyVitals[u.uid];
-      if (!v) return;
-      const bt = v.consumableBuffTurns || 0;
-      if (bt > 0) {
-        v.consumableBuffTurns = bt - 1;
-        if (v.consumableBuffTurns <= 0) {
-          v.consumableBuffMult = 1;
-        }
-      }
-    });
-  }
+  /** Reservado para efectos que deban dispararse al confirmar una acción (los buffs de equipo bajan en la oleada enemiga). */
+  function tickCombatRoundStart() {}
 
-  /** CD de habilidad del doctor, de reclutas y técnicas equipadas LOTG: una vez por oleada enemiga (no por cada clic). */
+  /**
+   * Fin de oleada enemiga: CD de técnicas nativas y equipadas, buff de equipo, consumibles de aliados,
+   * modos de combate del doctor/aliados y vulnerabilidades en enemigos — todo en la misma escala de «rondas».
+   */
   function lotgTickGlobalCooldownsAfterEnemyWave() {
     if (!lotgState || !inLotgCombat()) return;
     if (skillCdPro > 0) skillCdPro--;
@@ -4079,6 +4525,40 @@
         });
       });
     }
+    if (lotgState.combatBuff && lotgState.combatBuff.turns > 0) {
+      lotgState.combatBuff.turns--;
+      if (lotgState.combatBuff.turns <= 0) lotgState.combatBuff.atkMult = 1;
+    }
+    getPartyUnits().forEach((u) => {
+      const v = lotgState.combatAllyVitals && lotgState.combatAllyVitals[u.uid];
+      if (!v) return;
+      const bt = v.consumableBuffTurns || 0;
+      if (bt > 0) {
+        v.consumableBuffTurns = bt - 1;
+        if (v.consumableBuffTurns <= 0) v.consumableBuffMult = 1;
+      }
+      if (v.battleMods && (v.battleMods.turns || 0) > 0) {
+        v.battleMods.turns--;
+        if (v.battleMods.turns <= 0) {
+          v.battleMods.physPct = 0;
+          v.battleMods.magPct = 0;
+        }
+      }
+    });
+    if (lotgState.protagBattleMods && (lotgState.protagBattleMods.turns || 0) > 0) {
+      lotgState.protagBattleMods.turns--;
+      if (lotgState.protagBattleMods.turns <= 0) {
+        lotgState.protagBattleMods.physPct = 0;
+        lotgState.protagBattleMods.magPct = 0;
+      }
+    }
+    combatEnemies.forEach((en) => {
+      if (!en || en.hp <= 0) return;
+      if (en.lotgVulnerable && (en.lotgVulnerable.turns || 0) > 0) {
+        en.lotgVulnerable.turns--;
+        if (en.lotgVulnerable.turns <= 0) delete en.lotgVulnerable;
+      }
+    });
   }
 
   function clearTargetAilments(tk) {
@@ -4091,6 +4571,16 @@
     if (v) v.ailments = z;
   }
 
+  function allyBattleStancePhys(vitals) {
+    if (!vitals || !vitals.battleMods || (vitals.battleMods.turns || 0) <= 0) return 1;
+    return 1 + (vitals.battleMods.physPct || 0);
+  }
+
+  function allyBattleStanceMag(vitals) {
+    if (!vitals || !vitals.battleMods || (vitals.battleMods.turns || 0) <= 0) return 1;
+    return 1 + (vitals.battleMods.magPct || 0);
+  }
+
   function applyLotgEquippedSkill(skillId, whoUid, enemyIdx, allyKey) {
     const sk = getLotgBattleSkill(skillId);
     const p = lotgState.protag;
@@ -4101,12 +4591,25 @@
     const u = !isPro ? getPartyUnits().find((x) => x.uid === whoUid) : null;
     const vitals = !isPro && u ? lotgState.combatAllyVitals[u.uid] : null;
     if (!isPro && (!u || !vitals || vitals.hp <= 0)) return { ok: false, log: "Unidad no disponible." };
+    if (isPro) {
+      if (!lotgState.protagExtraSkillCd || typeof lotgState.protagExtraSkillCd !== "object") lotgState.protagExtraSkillCd = {};
+    } else {
+      if (!vitals.extraSkillCd) vitals.extraSkillCd = {};
+      if (!vitals.battleMods) vitals.battleMods = { physPct: 0, magPct: 0, turns: 0 };
+    }
     const cdMap = isPro ? lotgState.protagExtraSkillCd : vitals.extraSkillCd;
-    if ((cdMap[skillId] || 0) > 0) return { ok: false, log: "«" + sk.name + "» en enfriamiento." };
+    const cdLeft = cdMap[skillId] || 0;
+    if (cdLeft > 0) {
+      return { ok: false, log: "«" + sk.name + "» en enfriamiento (" + cdLeft + " ronda(s) enemiga(s))." };
+    }
     const cost = c.sp || 0;
     if (isPro) {
       if (p.spCur < cost) return { ok: false, log: "SP insuficiente para «" + sk.name + "»." };
     } else if (vitals.sp < cost) return { ok: false, log: u.name + " sin SP para «" + sk.name + "»." };
+    const cdSet = Math.max(0, Math.floor(Number(c.cd)));
+    function cdNote() {
+      return cdSet > 0 ? " Enfriamiento: " + cdSet + " ronda(s) enemiga(s)." : "";
+    }
     const atkZone = lotgState.anomalyBuffFloor === lotgState.floor && lotgState.anomalyBuffAmt ? 1 + lotgState.anomalyBuffAmt : 1;
     const cb = lotgState.combatBuff && lotgState.combatBuff.turns > 0 ? lotgState.combatBuff.atkMult || 1 : 1;
     const allyM = !isPro ? atkZone * allyConsumableBuffMult(vitals) * 1.1 : 1;
@@ -4115,10 +4618,12 @@
     function payCost() {
       if (isPro) {
         p.spCur -= cost;
-        lotgState.protagExtraSkillCd[skillId] = c.cd || 0;
+        if (cdSet > 0) lotgState.protagExtraSkillCd[skillId] = cdSet;
+        else delete lotgState.protagExtraSkillCd[skillId];
       } else {
         vitals.sp -= cost;
-        vitals.extraSkillCd[skillId] = c.cd || 0;
+        if (cdSet > 0) vitals.extraSkillCd[skillId] = cdSet;
+        else delete vitals.extraSkillCd[skillId];
       }
     }
 
@@ -4130,7 +4635,7 @@
       alive.forEach((en) => {
         const raw = isPro
           ? lotgProtagMagicalRaw(cs, atkZone, cb, coef * 0.92)
-          : allyCombatStats(u).atkM * coef * allyM * (0.95 + Math.random() * 0.25);
+          : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.95 + Math.random() * 0.25);
         const sp = alive.length > 1 ? 0.56 : 1;
         let dmg = damageToEnemyMagical(raw * sp, en);
         const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
@@ -4139,7 +4644,7 @@
         en.hp -= dmg;
         parts.push(en.name + " −" + dmg);
       });
-      return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + parts.join(", ") + "." };
+      return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + parts.join(", ") + "." + cdNote() };
     }
     if (c.kind === "dmg_mag_1") {
       const en = combatEnemies[enemyIdx];
@@ -4148,14 +4653,14 @@
       const coef = c.coef || 1.5;
       const raw = isPro
         ? lotgProtagMagicalRaw(cs, atkZone, cb, coef * 0.88)
-        : allyCombatStats(u).atkM * coef * allyM * (0.98 + Math.random() * 0.22);
+        : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.98 + Math.random() * 0.22);
       let dmg = damageToEnemyMagical(raw, en);
       const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
       dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
       if (Math.random() < pd.crit * 0.85) dmg = Math.floor(dmg * 1.42);
       dmg = Math.max(1, dmg);
       en.hp -= dmg;
-      return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + en.name + " −" + dmg + "." };
+      return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + en.name + " −" + dmg + "." + cdNote() };
     }
     if (c.kind === "dmg_phys_1") {
       const en = combatEnemies[enemyIdx];
@@ -4164,12 +4669,12 @@
       const coef = c.coef || 1.5;
       const raw = isPro
         ? lotgProtagPhysicalRaw(cs, atkZone, cb) * coef * 0.52
-        : allyCombatStats(u).atkP * coef * allyM * (0.96 + Math.random() * 0.24);
+        : allyCombatStats(u).atkP * coef * allyM * allyBattleStancePhys(vitals) * (0.96 + Math.random() * 0.24);
       let dmg = damageToEnemyPhysical(raw, en);
       dmg = Math.floor(dmg * elementalDamageMult(isPro ? p.lotgElement : u.element || "Neutral", en.element || "Neutral"));
       dmg = Math.max(1, dmg);
       en.hp -= dmg;
-      return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + en.name + " −" + dmg + "." };
+      return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + en.name + " −" + dmg + "." + cdNote() };
     }
     if (c.kind === "heal_all") {
       payCost();
@@ -4181,7 +4686,7 @@
         const am = allyCombatStats(al);
         v2.hp = Math.min(am.hpMax, v2.hp + Math.floor(am.hpMax * pct));
       });
-      return { ok: true, log: "«" + sk.name + "» — sanación grupal." };
+      return { ok: true, log: "«" + sk.name + "» — sanación grupal." + cdNote() };
     }
     if (c.kind === "heal_1") {
       payCost();
@@ -4196,7 +4701,7 @@
         if (!v2 || v2.hp <= 0) return { ok: false, log: "Objetivo inválido." };
         v2.hp = Math.min(am.hpMax, v2.hp + Math.floor(am.hpMax * pct));
       }
-      return { ok: true, log: "«" + sk.name + "» — curación focal." };
+      return { ok: true, log: "«" + sk.name + "» — curación focal." + cdNote() };
     }
     if (c.kind === "buff_team") {
       payCost();
@@ -4204,13 +4709,24 @@
       const bm = 1 + (c.buffPct || 0.1);
       lotgState.combatBuff.atkMult = Math.max(lotgState.combatBuff.atkMult || 1, bm);
       lotgState.combatBuff.turns = Math.max(lotgState.combatBuff.turns || 0, c.buffTurns || 4);
-      return { ok: true, log: "«" + sk.name + "» — refuerzo de equipo (" + (c.buffTurns || 4) + " t.)." };
+      return {
+        ok: true,
+        log:
+          "«" +
+          sk.name +
+          "» — refuerzo de equipo +" +
+          Math.round((c.buffPct || 0.1) * 100) +
+          "% daño (" +
+          (c.buffTurns || 4) +
+          " ronda(s) enemiga(s))." +
+          cdNote(),
+      };
     }
     if (c.kind === "cleanse_1") {
       payCost();
       const tk = allyKey === "protag" ? "protag" : allyKey;
       clearTargetAilments(tk);
-      return { ok: true, log: "«" + sk.name + "» — estados limpiados." };
+      return { ok: true, log: "«" + sk.name + "» — estados limpiados." + cdNote() };
     }
     if (c.kind === "dot_aoe") {
       payCost();
@@ -4218,7 +4734,7 @@
       alive.forEach((en) => {
         const raw = isPro
           ? lotgProtagMagicalRaw(cs, atkZone, cb, (c.coef || 0.5) * 0.9)
-          : allyCombatStats(u).atkM * (c.coef || 0.5) * allyM;
+          : allyCombatStats(u).atkM * (c.coef || 0.5) * allyM * allyBattleStanceMag(vitals);
         let dmg = damageToEnemyMagical(raw * 0.65, en);
         dmg = Math.floor(dmg * elementalDamageMult(sk.element || "Fuego", en.element || "Neutral"));
         dmg = Math.max(1, dmg);
@@ -4227,7 +4743,7 @@
         en.lotgDotDmg = dotD;
         en.lotgDotTurns = Math.max(en.lotgDotTurns || 0, c.dotTurns || 3);
       });
-      return { ok: true, log: "«" + sk.name + "» — impacto + DoT en horda." };
+      return { ok: true, log: "«" + sk.name + "» — impacto + DoT en horda." + cdNote() };
     }
     if (c.kind === "dot_main") {
       const en = combatEnemies[enemyIdx];
@@ -4235,13 +4751,13 @@
       payCost();
       const raw = isPro
         ? lotgProtagMagicalRaw(cs, atkZone, cb, (c.coef || 0.85) * 0.9)
-        : allyCombatStats(u).atkM * (c.coef || 0.85) * allyM;
+        : allyCombatStats(u).atkM * (c.coef || 0.85) * allyM * allyBattleStanceMag(vitals);
       let dmg = damageToEnemyMagical(raw, en);
       dmg = Math.max(1, dmg);
       en.hp -= dmg;
       en.lotgDotDmg = Math.max(2, Math.floor(en.hpMax * (c.dotHpPct || 0.04)));
       en.lotgDotTurns = c.dotTurns || 3;
-      return { ok: true, log: "«" + sk.name + "» — " + en.name + " marcado con DoT." };
+      return { ok: true, log: "«" + sk.name + "» — " + en.name + " marcado con DoT." + cdNote() };
     }
     if (c.kind === "status_enemy_1") {
       const en = combatEnemies[enemyIdx];
@@ -4250,7 +4766,7 @@
       const coef = c.coef || 0.4;
       const raw = isPro
         ? lotgProtagMagicalRaw(cs, atkZone, cb, coef * 0.88)
-        : allyCombatStats(u).atkM * coef * allyM * (0.96 + Math.random() * 0.22);
+        : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.96 + Math.random() * 0.22);
       let dmg = damageToEnemyMagical(raw, en);
       const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
       dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
@@ -4272,7 +4788,8 @@
           lab +
           " (" +
           (c.duration || 3) +
-          " rondas enemigas).",
+          " rondas enemigas)." +
+          cdNote(),
       };
     }
     if (c.kind === "status_enemy_aoe") {
@@ -4284,7 +4801,7 @@
       alive.forEach((en) => {
         const raw = isPro
           ? lotgProtagMagicalRaw(cs, atkZone, cb, coef * 0.88)
-          : allyCombatStats(u).atkM * coef * allyM * (0.94 + Math.random() * 0.2);
+          : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.94 + Math.random() * 0.2);
         const sp = alive.length > 1 ? 0.55 : 1;
         let dmg = damageToEnemyMagical(raw * sp, en);
         const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
@@ -4295,7 +4812,89 @@
         applyAilmentToEnemy(en, aff, dur);
         parts.push(en.name + " −" + dmg + " (" + LOTG_AILMENT_LABELS[aff] + ")");
       });
-      return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + parts.join(", ") + "." };
+      return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + parts.join(", ") + "." + cdNote() };
+    }
+    if (c.kind === "phys_double_1") {
+      const en = combatEnemies[enemyIdx];
+      if (!en || en.hp <= 0) return { ok: false, log: "Sin objetivo." };
+      payCost();
+      const c1 = c.coef1 != null ? c.coef1 : 0.9;
+      const c2 = c.coef2 != null ? c.coef2 : 0.72;
+      const raw1 = isPro
+        ? lotgProtagPhysicalRaw(cs, atkZone, cb) * c1 * 0.48
+        : allyCombatStats(u).atkP * c1 * allyM * allyBattleStancePhys(vitals) * (0.95 + Math.random() * 0.2);
+      const raw2 = isPro
+        ? lotgProtagPhysicalRaw(cs, atkZone, cb) * c2 * 0.48
+        : allyCombatStats(u).atkP * c2 * allyM * allyBattleStancePhys(vitals) * (0.92 + Math.random() * 0.22);
+      const el = isPro ? p.lotgElement : u.element || "Neutral";
+      let d1 = damageToEnemyPhysical(raw1, en);
+      d1 = Math.floor(d1 * elementalDamageMult(el, en.element || "Neutral"));
+      en.hp -= Math.max(1, d1);
+      let d2 = damageToEnemyPhysical(raw2, en);
+      d2 = Math.floor(d2 * elementalDamageMult(el, en.element || "Neutral"));
+      en.hp -= Math.max(1, d2);
+      return {
+        ok: true,
+        log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + en.name + " −" + d1 + " / −" + d2 + "." + cdNote(),
+      };
+    }
+    if (c.kind === "debuff_vuln_1") {
+      const en = combatEnemies[enemyIdx];
+      if (!en || en.hp <= 0) return { ok: false, log: "Sin objetivo." };
+      payCost();
+      const coef = c.coef || 0.55;
+      const raw = isPro
+        ? lotgProtagMagicalRaw(cs, atkZone, cb, coef * 0.86)
+        : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.96 + Math.random() * 0.2);
+      let dmg = damageToEnemyMagical(raw, en);
+      const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
+      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
+      if (isPro && Math.random() < pd.crit * 0.72) dmg = Math.floor(dmg * 1.32);
+      dmg = Math.max(1, dmg);
+      en.hp -= dmg;
+      en.lotgVulnerable = { pct: c.vulnPct != null ? c.vulnPct : 0.14, turns: c.vulnTurns != null ? c.vulnTurns : 3 };
+      return {
+        ok: true,
+        log:
+          (isPro ? p.name : u.name) +
+          ": «" +
+          sk.name +
+          "» — " +
+          en.name +
+          " −" +
+          dmg +
+          "; vulnerable +" +
+          Math.round((en.lotgVulnerable.pct || 0) * 100) +
+          "% daño (" +
+          (en.lotgVulnerable.turns || 0) +
+          " r.)." +
+          cdNote(),
+      };
+    }
+    if (c.kind === "buff_self_mod") {
+      payCost();
+      const turns = Math.max(1, Math.floor(Number(c.modTurns) || 4));
+      if (isPro) {
+        if (!lotgState.protagBattleMods) lotgState.protagBattleMods = { physPct: 0, magPct: 0, turns: 0 };
+        lotgState.protagBattleMods.physPct = Math.max(lotgState.protagBattleMods.physPct || 0, c.physPct || 0);
+        lotgState.protagBattleMods.magPct = Math.max(lotgState.protagBattleMods.magPct || 0, c.magPct || 0);
+        lotgState.protagBattleMods.turns = Math.max(lotgState.protagBattleMods.turns || 0, turns);
+      } else {
+        vitals.battleMods.physPct = Math.max(vitals.battleMods.physPct || 0, c.physPct || 0);
+        vitals.battleMods.magPct = Math.max(vitals.battleMods.magPct || 0, c.magPct || 0);
+        vitals.battleMods.turns = Math.max(vitals.battleMods.turns || 0, turns);
+      }
+      return {
+        ok: true,
+        log:
+          (isPro ? p.name : u.name) +
+          ": «" +
+          sk.name +
+          "» — postura ofensiva (" +
+          turns +
+          " ronda(s) enemiga(s))." +
+          cdNote(),
+      };
     }
     return { ok: false, log: "Técnica no implementada." };
   }
@@ -4305,7 +4904,9 @@
     if (!sk) return { ok: false, log: u.name + " no tiene habilidad definida." };
     const cost = sk.sp != null ? sk.sp : 16;
     if (vitals.sp < cost) return { ok: false, log: u.name + " no tiene SP suficiente (" + vitals.sp + "/" + cost + ")." };
-    if (vitals.skillCd > 0) return { ok: false, log: u.name + " — habilidad en CD (" + vitals.skillCd + ")." };
+    if (vitals.skillCd > 0) {
+      return { ok: false, log: u.name + " — habilidad en CD (" + vitals.skillCd + " ronda(s) enemiga(s))." };
+    }
     return { ok: true, sk };
   }
 
@@ -5023,13 +5624,28 @@
       } else if ((mergeAilments(vitals.ailments).silence || 0) > 0) {
         logLine(u.name + ": silenciada/o — técnica equipada bloqueada.");
       } else {
+        if (!vitals.extraSkillCd) vitals.extraSkillCd = {};
+        const cdAl = vitals.extraSkillCd[skillId] || 0;
+        if (cdAl > 0) {
+          logLine(u.name + ": «" + (sk.name || "Técnica") + "» en enfriamiento (" + cdAl + " ronda(s) enemiga(s)).");
+          renderLotgGame({ combatBg: cbg });
+          return;
+        }
         const blL = allyBlockedByPara(vitals, "skill");
         if (blL) {
           logLine(u.name + ": " + blL);
         } else {
         const k = sk.combat.kind;
         const aliveN = combatEnemies.filter((en) => en.hp > 0).length;
-        if ((k === "dmg_mag_1" || k === "dmg_phys_1" || k === "dot_main" || k === "status_enemy_1") && aliveN > 1) {
+        if (
+          (k === "dmg_mag_1" ||
+            k === "dmg_phys_1" ||
+            k === "dot_main" ||
+            k === "status_enemy_1" ||
+            k === "phys_double_1" ||
+            k === "debuff_vuln_1") &&
+          aliveN > 1
+        ) {
           combatPickMode = { type: "lotg_ally_skill_enemy", uid: u.uid, skillId };
           renderLotgGame({ combatBg: cbg });
           return;
@@ -5299,6 +5915,13 @@
         renderLotgGame({ combatBg: combatBgFromWrap() });
         return;
       }
+      if (!lotgState.protagExtraSkillCd || typeof lotgState.protagExtraSkillCd !== "object") lotgState.protagExtraSkillCd = {};
+      const cdRem = lotgState.protagExtraSkillCd[skillId] || 0;
+      if (cdRem > 0) {
+        logLine("«" + (sk.name || "Técnica") + "» en enfriamiento (" + cdRem + " ronda(s) enemiga(s)).");
+        renderLotgGame({ combatBg: combatBgFromWrap() });
+        return;
+      }
       const paX = mergeAilments(lotgState.protagAilments);
       if ((paX.silence || 0) > 0) {
         logLine("Silencio: no podés usar técnicas equipadas.");
@@ -5314,7 +5937,12 @@
       }
       const k = sk.combat.kind;
       const needsEnemy =
-        k === "dmg_mag_1" || k === "dmg_phys_1" || k === "dot_main" || k === "status_enemy_1";
+        k === "dmg_mag_1" ||
+        k === "dmg_phys_1" ||
+        k === "dot_main" ||
+        k === "status_enemy_1" ||
+        k === "phys_double_1" ||
+        k === "debuff_vuln_1";
       const needsAlly = k === "heal_1" || k === "cleanse_1";
       if (needsEnemy && aliveDefer > 1) {
         combatPickMode = { type: "lotg_skill_enemy", who: "protag", skillId };
@@ -5359,7 +5987,9 @@
         return;
       }
       if (skillCdPro > 0) {
-        logLine("Habilidad en enfriamiento (" + skillCdPro + " turno(s)). Elige otra acción — no pierdes el turno.");
+        logLine(
+          "Técnica del doctor en enfriamiento (" + skillCdPro + " ronda(s) enemiga(s)). Elegí otra acción — no perdés el turno."
+        );
         renderLotgGame({ combatBg: combatBgFromWrap() });
         return;
       }
@@ -5822,7 +6452,7 @@
       wrap.style.backgroundImage = `linear-gradient(180deg,rgba(6,8,14,.75),rgba(6,8,14,.92)), url("${cbg}")`;
       const allies = getPartyUnits();
       const allyV = lotgState.combatAllyVitals || {};
-      const combatHelpTxt = `<p class="smt-combat-help"><strong>Cómo funciona:</strong> primero el doctor (ataque a un enemigo si hay horda; técnica en área); luego cada aliado; después todos los enemigos. <strong>Enfriamientos (CD)</strong> de técnicas bajan <strong>una vez al terminar la oleada enemiga</strong> (no en cada clic). <strong>Estados alterados</strong> (silencio, sueño, quemadura, congelación, parálisis) duran <strong>rondas enemigas</strong> (3 al aplicar); la quemadura hace DoT al empezar la oleada enemiga. <strong>Neutralizador</strong> o la técnica <em>Lushen EX</em> limpian estados. <strong>HP máx.</strong> sube con <strong>HP</strong> y <strong>VI</strong>; <strong>SP</strong> con <strong>SP</strong> y <strong>MA</strong>.</p>`;
+      const combatHelpTxt = `<p class="smt-combat-help"><strong>Cómo funciona:</strong> primero el doctor (ataque a un enemigo si hay horda; técnica en área); luego cada aliado; después todos los enemigos. <strong>CD</strong> = rondas enemigas: cada vez que <strong>toda la horda</strong> termina de actuar, bajan 1 los enfriamientos y los buffs de equipo/consumibles. <strong>Estados alterados</strong> (silencio, sueño, quemadura, congelación, parálisis) duran <strong>rondas enemigas</strong>; la quemadura hace DoT al empezar la oleada enemiga. <strong>Neutralizador</strong> o <em>Lushen EX</em> limpian estados. <strong>HP máx.</strong> con <strong>HP</strong> y <strong>VI</strong>; <strong>SP</strong> con <strong>SP</strong> y <strong>MA</strong>.</p>`;
       const alliesCombat =
         allies.length > 0
           ? `<div class="smt-wing-caption">Aliados — un turno por unidad; revisa la descripción de cada habilidad antes de usarla.</div><div class="lotg-ally-combat-row smt-ally-strip">` +
@@ -5954,10 +6584,11 @@
           const cd = lotgState.protagExtraSkillCd[bid] || 0;
           const spc = sk.combat.sp != null ? sk.combat.sp : 0;
           const cdc = sk.combat.cd != null ? sk.combat.cd : 0;
+          const dis = combatPickMode || cd > 0 || p.spCur < spc;
           parts.push(
             `<button type="button" class="ghost" data-act="lotgextra:${escapeHtml(bid)}" style="font-size:0.7rem;max-width:100%;text-align:left;line-height:1.25"${
-              combatPickMode ? " disabled" : ""
-            }>${escapeHtml(sk.name)} · ${spc} SP · CD base ${cdc}${cd > 0 ? " · espera " + cd + "t" : ""}</button>`
+              dis ? " disabled" : ""
+            }>${escapeHtml(sk.name)} · ${spc} SP · CD ${cdc}${cd > 0 ? " · enfriamiento " + cd + " ronda(s)" : ""}</button>`
           );
         });
         return parts.length
@@ -5978,10 +6609,11 @@
                 const cd = curV.extraSkillCd[bid] || 0;
                 const spc = sk.combat.sp != null ? sk.combat.sp : 0;
                 const cdc = sk.combat.cd != null ? sk.combat.cd : 0;
+                const disA = combatPickMode || cd > 0 || curV.sp < spc;
                 parts.push(
                   `<button type="button" class="ghost" data-ally-act="allylotg:${escapeHtml(bid)}" style="font-size:0.68rem;max-width:100%;text-align:left;line-height:1.25"${
-                    combatPickMode ? " disabled" : ""
-                  }>${escapeHtml(sk.name)} · ${spc} SP${cd > 0 ? " · " + cd + "t" : ""} · CD ${cdc}</button>`
+                    disA ? " disabled" : ""
+                  }>${escapeHtml(sk.name)} · ${spc} SP · CD ${cdc}${cd > 0 ? " · enfriamiento " + cd + " ronda(s)" : ""}</button>`
                 );
               });
               return parts.length
