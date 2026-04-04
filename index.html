@@ -926,14 +926,9 @@
       clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
     }
     .smt-combat-header {
-      padding: 0.65rem min(380px, 40vw) 0.5rem 1rem;
+      padding: 0.65rem 1rem 0.5rem;
       border-bottom: 1px solid rgba(0, 255, 255, 0.2);
       background: linear-gradient(90deg, rgba(0, 40, 50, 0.5), transparent 55%);
-    }
-    @media (max-width: 720px) {
-      .smt-combat-header {
-        padding-right: 1rem;
-      }
     }
     .smt-combat-header-bar {
       display: flex;
@@ -979,10 +974,21 @@
     }
     .smt-combat-grid {
       display: grid;
-      grid-template-columns: minmax(160px, 1fr) minmax(220px, 1.35fr) minmax(150px, 0.95fr);
+      grid-template-columns: minmax(160px, 1fr) minmax(220px, 1.35fr) minmax(168px, 1.05fr);
       gap: 0.85rem;
       padding: 0.85rem 0.75rem 0.65rem;
       align-items: start;
+    }
+    /* Columna comandante: retrato arriba siempre visible; acciones debajo con scroll */
+    .smt-wing--commander {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.65rem;
+      min-width: 0;
+    }
+    .smt-wing--commander .smt-protag-card {
+      flex-shrink: 0;
     }
     @media (max-width: 960px) {
       .smt-combat-grid {
@@ -1067,15 +1073,13 @@
       background: linear-gradient(90deg, #6366f1, #22d3ee) !important;
       box-shadow: 0 0 8px rgba(34, 211, 238, 0.35);
     }
-    /* Panel de acciones / habilidades: más abajo para no tapar la tarjeta COMANDANTE (columna derecha) */
-    .smt-action-deck-floating {
-      position: absolute;
-      top: clamp(9.25rem, 20vh, 13.5rem);
-      right: 0.55rem;
-      width: min(340px, calc(100% - 1.1rem));
-      max-height: min(52vh, 400px);
+    /* Panel de acciones bajo la tarjeta del comandante (no superpuesto) */
+    .smt-action-deck-commander {
+      flex: 1 1 auto;
+      min-height: 0;
+      max-height: min(50vh, 440px);
+      overflow-x: hidden;
       overflow-y: auto;
-      z-index: 11;
       padding: 0.5rem 0.6rem;
       border-radius: 10px;
       border: 1px solid rgba(34, 211, 238, 0.35);
@@ -1083,25 +1087,14 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(236, 72, 153, 0.12);
     }
     @media (max-width: 720px) {
-      .smt-action-deck-floating {
-        position: relative;
-        top: auto;
-        right: auto;
-        width: 100%;
-        max-height: none;
-        margin: 0 0 0.5rem;
+      .smt-action-deck-commander {
+        max-height: min(55vh, 480px);
       }
     }
     .smt-combat-footer {
       padding: 0.65rem 0.85rem 0.85rem;
       border-top: 1px solid rgba(236, 72, 153, 0.2);
       background: linear-gradient(0deg, rgba(20, 0, 30, 0.5), transparent);
-      padding-right: min(380px, 36vw);
-    }
-    @media (max-width: 720px) {
-      .smt-combat-footer {
-        padding-right: 0.85rem;
-      }
     }
     .smt-combat-log {
       font-family: ui-monospace, "Cascadia Code", monospace;

@@ -6106,7 +6106,6 @@
             </div>
             ${combatHelpTxt}
           </header>
-          <div class="smt-action-deck-floating smt-action-deck">${actionBlock}</div>
           <div class="smt-combat-grid">
             <aside class="smt-wing smt-wing--allies">
               <h3 class="smt-wing-title smt-wing-title--cyan">ALIADOS</h3>
@@ -6127,6 +6126,7 @@
                 <div class="bar-wrap smt-bar"><div class="bar-fill sp" style="width:${(p.spCur / cs.spMax) * 100}%"></div></div>
                 <div class="smt-stat-line">SP ${p.spCur}/${cs.spMax}</div>
               </div>
+              <div class="smt-action-deck-commander smt-action-deck">${actionBlock}</div>
             </aside>
           </div>
           <footer class="smt-combat-footer">
