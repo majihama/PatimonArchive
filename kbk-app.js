@@ -61,18 +61,27 @@
 
   /** Balance fijo de defensa enemiga por tramo de piso (se aplica en scaleEnemy). */
   const LOTG_ENEMY_DEF_BANDS = [
-    { min: 1, max: 6, enMult: 1.0, viMult: 1.0 },
-    { min: 7, max: 10, enMult: 0.78, viMult: 0.9 },
-    { min: 11, max: 15, enMult: 0.72, viMult: 0.86 },
-    { min: 16, max: 20, enMult: 0.67, viMult: 0.82 },
-    { min: 21, max: 999, enMult: 0.63, viMult: 0.78 },
+    { min: 1, max: 6, enMult: 1.0, viMult: 1.0, hpMult: 1.0 },
+    { min: 7, max: 9, enMult: 0.84, viMult: 0.94, hpMult: 0.96 },
+    { min: 10, max: 12, enMult: 0.74, viMult: 0.88, hpMult: 0.89 },
+    { min: 13, max: 16, enMult: 0.68, viMult: 0.83, hpMult: 0.82 },
+    { min: 17, max: 20, enMult: 0.62, viMult: 0.78, hpMult: 0.76 },
+    { min: 21, max: 999, enMult: 0.58, viMult: 0.74, hpMult: 0.7 },
   ];
 
   /** Caps objetivo de EN final por tipo enemigo para evitar esponjas. */
   const LOTG_ENEMY_EN_CAP = {
-    normal: { base: 210, perFloor: 4 },
-    mini: { base: 260, perFloor: 5 },
-    boss: { base: 320, perFloor: 6 },
+    normal: { base: 190, perFloor: 3 },
+    mini: { base: 235, perFloor: 4 },
+    boss: { base: 290, perFloor: 5 },
+  };
+
+  /** Modificadores de afinidad elemental para que las debilidades/resistencias se noten en daño final. */
+  const LOTG_ELEMENTAL_RULES = {
+    weak: 1.35,
+    resist: 0.68,
+    same: 0.9,
+    nullify: 0,
   };
 
   /** Escalado de daño por tipo de técnica (tabla hardcodeada). */
@@ -2270,12 +2279,32 @@
     return "Neutral";
   }
 
-  function elementalDamageMult(attackerEl, defenderEl) {
+  function lotgElementalTraitsForDefender(defenderEl, boss, miniboss, floor) {
+    const d = normalizeLotgElement(defenderEl);
+    if (d === "Neutral") return null;
+    const weakTo = Object.keys(LOTG_TRIANGLE).find((k) => LOTG_TRIANGLE[k] === d);
+    const resistTo = LOTG_TRIANGLE[d];
+    const nullify = [];
+    if (boss || miniboss || floor >= 14) {
+      const chance = boss ? 0.32 : miniboss ? 0.22 : 0.1;
+      if (Math.random() < chance) nullify.push(d);
+    }
+    return { weakTo: weakTo ? [weakTo] : [], resistTo: resistTo ? [resistTo] : [], nullify };
+  }
+
+  function elementalDamageMult(attackerEl, defenderEl, defenderMeta) {
     const a = normalizeLotgElement(String(attackerEl || ""));
     const d = normalizeLotgElement(String(defenderEl || ""));
     if (a === "Neutral" || d === "Neutral") return 1;
-    if (LOTG_TRIANGLE[a] === d) return 1.22;
-    if (LOTG_TRIANGLE[d] === a) return 0.82;
+    const traits = defenderMeta && defenderMeta.elementalTraits ? defenderMeta.elementalTraits : null;
+    if (traits) {
+      if (Array.isArray(traits.nullify) && traits.nullify.includes(a)) return LOTG_ELEMENTAL_RULES.nullify;
+      if (Array.isArray(traits.weakTo) && traits.weakTo.includes(a)) return LOTG_ELEMENTAL_RULES.weak;
+      if (Array.isArray(traits.resistTo) && traits.resistTo.includes(a)) return LOTG_ELEMENTAL_RULES.resist;
+    }
+    if (a === d) return LOTG_ELEMENTAL_RULES.same;
+    if (LOTG_TRIANGLE[a] === d) return LOTG_ELEMENTAL_RULES.weak;
+    if (LOTG_TRIANGLE[d] === a) return LOTG_ELEMENTAL_RULES.resist;
     return 1;
   }
 
@@ -3489,7 +3518,7 @@
     if (v && v.battleMods && (v.battleMods.turns || 0) > 0) stance += v.battleMods.physPct || 0;
     const raw = (st.atkP * 0.62 + core * 2.05) * (0.96 + Math.random() * 0.28) * 1.1 * em * stance * (1 + wStg * 0.0054 + syn);
     let dmg = damageToEnemyPhysical(raw, e);
-    dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", e.element || "Neutral"));
+    dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", e.element || "Neutral", e));
     return Math.max(1, dmg);
   }
 
@@ -3560,6 +3589,7 @@
     const lm = 1 + (level - 1) * 0.038;
     const hpTier = boss ? 1.34 : miniboss ? 1.22 : 1.05;
     let hpMax = Math.floor((40 + stats.HP * 11 + stats.VI * 6.5 + stats.EN * 4.5) * lm * danger * hpTier);
+    hpMax = Math.floor(hpMax * (defBand.hpMult || 1));
     if (!boss && !miniboss) hpMax = Math.floor(hpMax * 0.68);
     else if (miniboss) hpMax = Math.floor(hpMax * 0.88);
     const spMax = Math.floor((18 + stats.SP * 7 + stats.MA * 2) * lm);
@@ -3577,6 +3607,7 @@
       spMax,
       spCur: spMax,
       ailments: emptyAilments(),
+      elementalTraits: lotgElementalTraitsForDefender(t.element || "Neutral", !!boss, !!miniboss, floor),
       statusSkillInternalCd: 0,
     };
   }
@@ -5282,8 +5313,8 @@
         const sp = alive.length > 1 ? 0.62 : 1;
         let dmg = damageToEnemyMagical(raw * sp, en);
         const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
-        dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
-        dmg = Math.max(1, dmg);
+        dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral", en));
+        dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
         en.hp -= dmg;
         parts.push(en.name + " −" + dmg);
       });
@@ -5299,9 +5330,9 @@
         : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.98 + Math.random() * 0.22);
       let dmg = damageToEnemyMagical(raw, en);
       const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
-      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
+      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral", en));
       if (Math.random() < pd.crit * 0.85) dmg = Math.floor(dmg * 1.42);
-      dmg = Math.max(1, dmg);
+      dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
       en.hp -= dmg;
       return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + en.name + " −" + dmg + "." + cdNote() };
     }
@@ -5314,8 +5345,8 @@
         ? lotgProtagPhysicalRaw(cs, atkZone, cb) * coef * 0.62
         : allyCombatStats(u).atkP * coef * allyM * allyBattleStancePhys(vitals) * (0.96 + Math.random() * 0.24);
       let dmg = damageToEnemyPhysical(raw, en);
-      dmg = Math.floor(dmg * elementalDamageMult(isPro ? p.lotgElement : u.element || "Neutral", en.element || "Neutral"));
-      dmg = Math.max(1, dmg);
+      dmg = Math.floor(dmg * elementalDamageMult(isPro ? p.lotgElement : u.element || "Neutral", en.element || "Neutral", en));
+      dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
       en.hp -= dmg;
       return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + en.name + " −" + dmg + "." + cdNote() };
     }
@@ -5329,11 +5360,11 @@
         : allyFirearmRaw(u, vitals, allyM, coef);
       let dmg = damageToEnemyPhysical(raw, en);
       const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
-      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
+      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral", en));
       if (Math.random() < (isPro ? pd.crit : critChanceFromStats(mergeStatsWithEquipSlots((u && u.stats) || {}, (u && u.equipSlots) || {}))) * 0.86) {
         dmg = Math.floor(dmg * 1.46);
       }
-      dmg = Math.max(1, dmg);
+      dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
       en.hp -= dmg;
       return { ok: true, log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — disparo a " + en.name + " por " + dmg + "." + cdNote() };
     }
@@ -5397,8 +5428,8 @@
           ? lotgProtagMagicalRaw(cs, atkZone, cb, (c.coef || 0.5) * 0.9)
           : allyCombatStats(u).atkM * (c.coef || 0.5) * allyM * allyBattleStanceMag(vitals);
         let dmg = damageToEnemyMagical(raw * 0.65, en);
-        dmg = Math.floor(dmg * elementalDamageMult(sk.element || "Fuego", en.element || "Neutral"));
-        dmg = Math.max(1, dmg);
+        dmg = Math.floor(dmg * elementalDamageMult(sk.element || "Fuego", en.element || "Neutral", en));
+        dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
         en.hp -= dmg;
         const dotD = Math.max(2, Math.floor(en.hpMax * (c.dotHpPct || 0.045)));
         en.lotgDotDmg = dotD;
@@ -5414,7 +5445,7 @@
         ? lotgProtagMagicalRaw(cs, atkZone, cb, (c.coef || 0.85) * 0.9)
         : allyCombatStats(u).atkM * (c.coef || 0.85) * allyM * allyBattleStanceMag(vitals);
       let dmg = damageToEnemyMagical(raw, en);
-      dmg = Math.max(1, dmg);
+      dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
       en.hp -= dmg;
       en.lotgDotDmg = Math.max(2, Math.floor(en.hpMax * (c.dotHpPct || 0.04)));
       en.lotgDotTurns = c.dotTurns || 3;
@@ -5430,7 +5461,7 @@
         : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.96 + Math.random() * 0.22);
       let dmg = damageToEnemyMagical(raw, en);
       const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
-      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
+      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral", en));
       dmg = Math.max(1, dmg);
       en.hp -= dmg;
       applyAilmentToEnemy(en, c.ailment, c.duration || 3);
@@ -5466,8 +5497,8 @@
         const sp = alive.length > 1 ? 0.62 : 1;
         let dmg = damageToEnemyMagical(raw * sp, en);
         const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
-        dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
-        dmg = Math.max(1, dmg);
+        dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral", en));
+        dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
         en.hp -= dmg;
         const aff = Math.random() < 0.5 ? "burn" : "para";
         applyAilmentToEnemy(en, aff, dur);
@@ -5489,11 +5520,11 @@
         : allyCombatStats(u).atkP * c2 * allyM * allyBattleStancePhys(vitals) * (0.92 + Math.random() * 0.22);
       const el = isPro ? p.lotgElement : u.element || "Neutral";
       let d1 = damageToEnemyPhysical(raw1, en);
-      d1 = Math.floor(d1 * elementalDamageMult(el, en.element || "Neutral"));
-      en.hp -= Math.max(1, d1);
+      d1 = Math.floor(d1 * elementalDamageMult(el, en.element || "Neutral", en));
+      en.hp -= d1 <= 0 ? 0 : Math.max(1, d1);
       let d2 = damageToEnemyPhysical(raw2, en);
-      d2 = Math.floor(d2 * elementalDamageMult(el, en.element || "Neutral"));
-      en.hp -= Math.max(1, d2);
+      d2 = Math.floor(d2 * elementalDamageMult(el, en.element || "Neutral", en));
+      en.hp -= d2 <= 0 ? 0 : Math.max(1, d2);
       return {
         ok: true,
         log: (isPro ? p.name : u.name) + ": «" + sk.name + "» — " + en.name + " −" + d1 + " / −" + d2 + "." + cdNote(),
@@ -5509,9 +5540,9 @@
         : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.96 + Math.random() * 0.2);
       let dmg = damageToEnemyMagical(raw, en);
       const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
-      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
+      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral", en));
       if (isPro && Math.random() < pd.crit * 0.72) dmg = Math.floor(dmg * 1.32);
-      dmg = Math.max(1, dmg);
+      dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
       en.hp -= dmg;
       en.lotgVulnerable = { pct: c.vulnPct != null ? c.vulnPct : 0.14, turns: c.vulnTurns != null ? c.vulnTurns : 3 };
       return {
@@ -5542,8 +5573,8 @@
         : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.98 + Math.random() * 0.2);
       let dmg = damageToEnemyMagical(raw, en);
       const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
-      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
-      dmg = Math.max(1, dmg);
+      dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral", en));
+      dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
       en.hp -= dmg;
       const down = Math.max(6, Math.floor(Number(c.enDown) || 16));
       const turns = Math.max(1, Math.floor(Number(c.enTurns) || 3));
@@ -5583,8 +5614,8 @@
         const sp = alive.length > 1 ? 0.64 : 1;
         let dmg = damageToEnemyMagical(raw * sp, en);
         const el = sk.element || (isPro ? p.lotgElement : u.element) || "Neutral";
-        dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral"));
-        dmg = Math.max(1, dmg);
+        dmg = Math.floor(dmg * elementalDamageMult(el, en.element || "Neutral", en));
+        dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
         en.hp -= dmg;
         const cur = en.lotgEnemyDebuff || { enFlat: 0, viFlat: 0, maFlat: 0, turns: 0 };
         cur.enFlat = Math.max(cur.enFlat || 0, down);
@@ -5617,8 +5648,8 @@
         ? lotgProtagMagicalRaw(cs, atkZone, cb, coef * 0.9)
         : allyCombatStats(u).atkM * coef * allyM * allyBattleStanceMag(vitals) * (0.95 + Math.random() * 0.22);
       let dmg = damageToEnemyMagical(raw, en);
-      dmg = Math.floor(dmg * elementalDamageMult(sk.element || "Neutral", en.element || "Neutral"));
-      dmg = Math.max(1, dmg);
+      dmg = Math.floor(dmg * elementalDamageMult(sk.element || "Neutral", en.element || "Neutral", en));
+      dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
       en.hp -= dmg;
       const pct = Math.min(0.55, Math.max(0.08, Number(c.atkDownPct) || 0.2));
       const turns = Math.max(1, Math.floor(Number(c.atkDownTurns) || 3));
@@ -5817,8 +5848,8 @@
           if (en.hp <= 0) return;
           let raw = rawSmall * (aliveN > 1 ? 0.62 : 1);
           let dmg = damageToEnemyMagical(raw, en);
-          dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", en.element || "Neutral"));
-          dmg = Math.max(1, dmg);
+          dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", en.element || "Neutral", en));
+          dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
           en.hp -= dmg;
           parts.push(en.name + " −" + dmg);
         });
@@ -5827,8 +5858,8 @@
       const en = combatEnemies[enemyIdx];
       if (!en || en.hp <= 0) return { log: "Sin objetivo." };
       let dmg = damageToEnemyMagical(rawSmall, en);
-      dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", en.element || "Neutral"));
-      dmg = Math.max(1, dmg);
+      dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", en.element || "Neutral", en));
+      dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
       en.hp -= dmg;
       return { log: u.name + ": «" + skName + "» — debuff a " + en.name + " (" + dmg + ")." };
     }
@@ -5852,8 +5883,8 @@
         if (en.hp <= 0) return;
         const raw = rawBase * spread;
         let dmg = profile.magical ? damageToEnemyMagical(raw, en) : damageToEnemyPhysical(raw, en);
-        dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", en.element || "Neutral"));
-        dmg = Math.max(1, dmg);
+        dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", en.element || "Neutral", en));
+        dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
         en.hp -= dmg;
         parts.push(en.name + " −" + dmg);
       });
@@ -5871,8 +5902,8 @@
       (profile.firearm ? 1 : am) *
       (1.02 + Math.random() * 0.3);
     let dmg = profile.magical ? damageToEnemyMagical(rawOne, en) : damageToEnemyPhysical(rawOne, en);
-    dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", en.element || "Neutral"));
-    dmg = Math.max(1, dmg);
+    dmg = Math.floor(dmg * elementalDamageMult(u.element || "Neutral", en.element || "Neutral", en));
+    dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
     en.hp -= dmg;
     return { log: u.name + ": «" + skName + "» — " + en.name + " −" + dmg + "." };
   }
@@ -5904,7 +5935,7 @@
       combatPickMode = null;
       const raw = lotgProtagPhysicalRaw(cs, anomalyOnly, buffMult * protagFreezeDamageMult());
       let dmg = damageToEnemyPhysical(raw, en);
-      dmg = Math.floor(dmg * elementalDamageMult(p.lotgElement || "Neutral", en.element || "Neutral"));
+      dmg = Math.floor(dmg * elementalDamageMult(p.lotgElement || "Neutral", en.element || "Neutral", en));
       let crit = false;
       if (Math.random() < pd.crit) {
         dmg = Math.floor(dmg * 1.55);
@@ -6867,7 +6898,7 @@
       if (aliveN <= 1) {
         const raw = lotgProtagPhysicalRaw(cs, atkMult, buffMult * protagFreezeDamageMult());
         let dmg = damageToEnemyPhysical(raw, e);
-        dmg = Math.floor(dmg * elementalDamageMult(p.lotgElement || "Neutral", e.element || "Neutral"));
+        dmg = Math.floor(dmg * elementalDamageMult(p.lotgElement || "Neutral", e.element || "Neutral", e));
         let crit = false;
         if (Math.random() < pd.crit) {
           dmg = Math.floor(dmg * 1.55);
@@ -6890,9 +6921,9 @@
         const raw = lotgProtagMagicalRaw(cs, atkMult, buffMult * protagFreezeDamageMult(), 1.32);
         const spread = alive.length > 1 ? 0.52 : 1;
         let dmg = damageToEnemyMagical(raw * spread, en);
-        dmg = Math.floor(dmg * elementalDamageMult(p.lotgElement || "Neutral", en.element || "Neutral"));
+        dmg = Math.floor(dmg * elementalDamageMult(p.lotgElement || "Neutral", en.element || "Neutral", en));
         if (Math.random() < pd.crit * 0.92) dmg = Math.floor(dmg * 1.45);
-        dmg = Math.max(1, dmg);
+        dmg = dmg <= 0 ? 0 : Math.max(1, dmg);
         en.hp -= dmg;
         parts.push(en.name + " −" + dmg);
       });
