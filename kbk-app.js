@@ -64,16 +64,17 @@
     { min: 1, max: 6, enMult: 1.0, viMult: 1.0, hpMult: 1.0 },
     { min: 7, max: 9, enMult: 0.84, viMult: 0.94, hpMult: 0.96 },
     { min: 10, max: 12, enMult: 0.74, viMult: 0.88, hpMult: 0.89 },
-    { min: 13, max: 16, enMult: 0.68, viMult: 0.83, hpMult: 0.82 },
-    { min: 17, max: 20, enMult: 0.62, viMult: 0.78, hpMult: 0.76 },
-    { min: 21, max: 999, enMult: 0.58, viMult: 0.74, hpMult: 0.7 },
+    { min: 13, max: 14, enMult: 0.66, viMult: 0.8, hpMult: 0.79 },
+    { min: 15, max: 17, enMult: 0.56, viMult: 0.73, hpMult: 0.67 },
+    { min: 18, max: 20, enMult: 0.5, viMult: 0.67, hpMult: 0.6 },
+    { min: 21, max: 999, enMult: 0.48, viMult: 0.62, hpMult: 0.56 },
   ];
 
   /** Caps objetivo de EN final por tipo enemigo para evitar esponjas. */
   const LOTG_ENEMY_EN_CAP = {
-    normal: { base: 190, perFloor: 3 },
-    mini: { base: 235, perFloor: 4 },
-    boss: { base: 290, perFloor: 5 },
+    normal: { base: 176, perFloor: 3 },
+    mini: { base: 220, perFloor: 4 },
+    boss: { base: 268, perFloor: 5 },
   };
 
   /** Modificadores de afinidad elemental para que las debilidades/resistencias se noten en daño final. */
@@ -86,9 +87,9 @@
 
   /** Escalado de daño por tipo de técnica (tabla hardcodeada). */
   const LOTG_DAMAGE_SCALING = {
-    phys: { stg: 1.0, weapon: 0.9, dx: 0.2 },
-    mag: { ma: 1.0, weapon: 0.85, sp: 0.18 },
-    firearm: { dx: 1.0, weapon: 1.0, stg: 0.25 },
+    phys: { stg: 1.06, weapon: 1.0, dx: 0.24 },
+    mag: { ma: 1.08, weapon: 0.95, sp: 0.24 },
+    firearm: { dx: 1.08, weapon: 1.08, stg: 0.3 },
   };
 
   /** Soul Points iniciales. Común ×1 = 700 SP; premium ×1 = 870, ×10 = 2500. */
@@ -2016,10 +2017,10 @@
     if (!sk) return 99999;
     const base = sk.shopSoul != null ? sk.shopSoul : 480;
     const tier =
-      sk.rarity === "SSS" ? 3.1 : sk.rarity === "SS" ? 2.45 : sk.rarity === "S" ? 2.05 : sk.rarity === "A" ? 1.55 : sk.rarity === "B" ? 1.32 : 1.12;
+      sk.rarity === "SSS" ? 2.55 : sk.rarity === "SS" ? 2.05 : sk.rarity === "S" ? 1.72 : sk.rarity === "A" ? 1.35 : sk.rarity === "B" ? 1.18 : 1.06;
     const purchases = (lotgState && Number(lotgState.shopSoulPurchases)) || 0;
-    const inflation = 1 + Math.min(2.5, purchases * 0.038);
-    return Math.max(200, Math.floor(base * tier * inflation));
+    const inflation = 1 + Math.min(1.35, purchases * 0.024);
+    return Math.max(180, Math.floor(base * tier * inflation));
   }
 
   /** Quién tiene equipada la técnica (solo una unidad a la vez). */
@@ -2574,7 +2575,10 @@
     if (typeof s.runCombatAtkFights !== "number" || !Number.isFinite(s.runCombatAtkFights)) s.runCombatAtkFights = 0;
     if (typeof s.mapPos !== "string" || !/^\s*\d+\s*,\s*\d+\s*$/.test(s.mapPos)) s.mapPos = "2,2";
     if (typeof s.floor !== "number" || !Number.isFinite(s.floor) || s.floor < 1) s.floor = 1;
+    if (s.floor > 20) s.floor = 20;
     if (typeof s.zen !== "number" || !Number.isFinite(s.zen)) s.zen = 0;
+    if (typeof s.floor20FinalBossDefeated !== "boolean") s.floor20FinalBossDefeated = false;
+    if (typeof s.floor20RewardClaimed !== "boolean") s.floor20RewardClaimed = false;
     if (s.protag && typeof s.protag === "object") {
       if (!s.protag.stats || typeof s.protag.stats !== "object") s.protag.stats = emptyStats();
       else
@@ -2675,6 +2679,35 @@
       if (!Array.isArray(u.equippedSkills)) u.equippedSkills = [];
       u.equippedSkills = u.equippedSkills.filter((id) => typeof id === "string").slice(0, 4);
     });
+    if (!s.balancePass_2026_04_Zahurt) {
+      const boostStats = (stats, mult) => {
+        if (!stats || typeof stats !== "object") return;
+        STAT_KEYS.forEach((k) => {
+          stats[k] = Math.max(0, Math.floor((Number(stats[k]) || 0) * mult));
+        });
+      };
+      const boostEquip = (eq) => {
+        if (!eq || typeof eq !== "object" || !eq.bonus || typeof eq.bonus !== "object") return;
+        const isWeapon = eq.equipSlot === "Arma";
+        const mult = isWeapon ? 1.55 : 1.38;
+        Object.keys(eq.bonus).forEach((k) => {
+          eq.bonus[k] = Math.max(0, Math.floor((Number(eq.bonus[k]) || 0) * mult));
+        });
+      };
+      (s.roster || []).forEach((u) => boostStats(u.stats, 2));
+      boostEquip((s.equipSlots || {}).Cabeza);
+      boostEquip((s.equipSlots || {}).Cuerpo);
+      boostEquip((s.equipSlots || {}).Arma);
+      boostEquip((s.equipSlots || {}).Accesorio);
+      (s.roster || []).forEach((u) => {
+        boostEquip((u.equipSlots || {}).Cabeza);
+        boostEquip((u.equipSlots || {}).Cuerpo);
+        boostEquip((u.equipSlots || {}).Arma);
+        boostEquip((u.equipSlots || {}).Accesorio);
+      });
+      (s.gearStash || []).forEach((eq) => boostEquip(eq));
+      s.balancePass_2026_04_Zahurt = true;
+    }
     lotgMigrateExclusiveSkills(s);
   }
 
@@ -2685,6 +2718,14 @@
     if (lotgState.floorConditionForFloor === f) return;
     lotgState.floorConditionForFloor = f;
     lotgState.mapBossCellKey = null;
+    if (f >= 20) {
+      lotgState.floor = 20;
+      lotgState.floorAdvanceRule = "boss";
+      lotgState.floorBossCleared = !!lotgState.floor20FinalBossDefeated;
+      lotgState.floorExitKey = true;
+      lotgState.floorRelicFound = true;
+      return;
+    }
     if (f % 3 === 0) {
       lotgState.floorAdvanceRule = "boss";
       lotgState.floorBossCleared = false;
@@ -3322,16 +3363,26 @@
   }
 
   function enemyMitigationPhys(e) {
-    return mitigationPhysFromStats(enemyStatsWithDebuffs(e), enemyLevelMult(e));
+    let m = mitigationPhysFromStats(enemyStatsWithDebuffs(e), enemyLevelMult(e));
+    const floor = e && Number.isFinite(e.floor) ? e.floor : 1;
+    if (floor >= 15) m *= 0.9;
+    if (floor >= 20) m *= 0.86;
+    return Math.max(0, Math.min(0.92, m));
   }
 
   function enemyMitigationMag(e) {
-    return mitigationMagFromStats(enemyStatsWithDebuffs(e), enemyLevelMult(e));
+    let m = mitigationMagFromStats(enemyStatsWithDebuffs(e), enemyLevelMult(e));
+    const floor = e && Number.isFinite(e.floor) ? e.floor : 1;
+    if (floor >= 15) m *= 0.9;
+    if (floor >= 20) m *= 0.86;
+    return Math.max(0, Math.min(0.92, m));
   }
 
   function damageToEnemyPhysical(raw, e) {
     const mit = enemyMitigationPhys(e);
-    let dmg = Math.max(1, Math.floor(raw * (1 - mit)));
+    const floor = e && Number.isFinite(e.floor) ? e.floor : 1;
+    const outAmp = floor >= 15 ? 1.2 : 1.12;
+    let dmg = Math.max(1, Math.floor(raw * (1 - mit) * outAmp));
     if (e && e.lotgVulnerable && (e.lotgVulnerable.turns || 0) > 0) {
       dmg = Math.floor(dmg * (1 + (e.lotgVulnerable.pct || 0)));
     }
@@ -3340,7 +3391,9 @@
 
   function damageToEnemyMagical(raw, e) {
     const mit = enemyMitigationMag(e);
-    let dmg = Math.max(1, Math.floor(raw * (1 - mit)));
+    const floor = e && Number.isFinite(e.floor) ? e.floor : 1;
+    const outAmp = floor >= 15 ? 1.2 : 1.12;
+    let dmg = Math.max(1, Math.floor(raw * (1 - mit) * outAmp));
     if (e && e.lotgVulnerable && (e.lotgVulnerable.turns || 0) > 0) {
       dmg = Math.floor(dmg * (1 + (e.lotgVulnerable.pct || 0)));
     }
@@ -3534,7 +3587,10 @@
   function lotgEnemyEnCapFor(floor, boss, miniboss) {
     const f = Math.max(1, Math.floor(Number(floor) || 1));
     const capCfg = boss ? LOTG_ENEMY_EN_CAP.boss : miniboss ? LOTG_ENEMY_EN_CAP.mini : LOTG_ENEMY_EN_CAP.normal;
-    return capCfg.base + f * capCfg.perFloor;
+    let cap = capCfg.base + f * capCfg.perFloor;
+    if (f >= 15) cap = Math.floor(cap * 0.9);
+    if (f >= 20) cap = Math.floor(cap * 0.86);
+    return cap;
   }
 
   /** Enemigo con mismas stats base que las unidades (HP, SP, STG, DX, MA, …), nivel ≥1 que escala con piso y victorias. */
@@ -3590,6 +3646,8 @@
     const hpTier = boss ? 1.34 : miniboss ? 1.22 : 1.05;
     let hpMax = Math.floor((40 + stats.HP * 11 + stats.VI * 6.5 + stats.EN * 4.5) * lm * danger * hpTier);
     hpMax = Math.floor(hpMax * (defBand.hpMult || 1));
+    if (floor >= 15) hpMax = Math.floor(hpMax * 0.86);
+    if (floor >= 20) hpMax = Math.floor(hpMax * 0.82);
     if (!boss && !miniboss) hpMax = Math.floor(hpMax * 0.68);
     else if (miniboss) hpMax = Math.floor(hpMax * 0.88);
     const spMax = Math.floor((18 + stats.SP * 7 + stats.MA * 2) * lm);
@@ -3613,13 +3671,13 @@
   }
 
   function xpToNext(lv) {
-    return 64 + lv * 36;
+    return 52 + lv * 28;
   }
 
   /** Umbral de XP para subir de nivel un recluta (más bajo que el doctor → suben un poco más rápido). */
   function unitXpThreshold(lv) {
     const l = lv != null && lv >= 1 ? lv : 1;
-    return 42 + l * 19;
+    return 34 + l * 14;
   }
 
   function lotgSave() {
@@ -3722,11 +3780,12 @@
       ok.className = "primary";
       ok.textContent = "Aceptar set";
       ok.addEventListener("click", () => {
+        if (lotgState) lotgState.floor20RewardClaimed = true;
         closeFloor20RewardOverlay();
         alert(
           "Manda una captura al GM del set que elegiste:\n«" +
             s.label +
-            "»\n\n¡Gracias por participar! Tu partida guardada se borrará para que puedas crear un personaje nuevo desde cero."
+            "»\n\nDerrotaste a Zahurt, la anomalía final del piso 20.\n¡Gracias por participar! Tu partida guardada se borrará para que puedas crear un personaje nuevo desde cero."
         );
         const gw = document.getElementById("lotgGameWrap");
         if (gw) {
@@ -3850,10 +3909,12 @@
       extraPool = 24;
     }
     const st = emptyStats();
+    const minBoost = 2;
+    const poolBoost = 2;
     STAT_KEYS.forEach((k) => {
-      st[k] = minEach;
+      st[k] = minEach * minBoost;
     });
-    distributeWeightedStatPoints(st, weights, extraPool);
+    distributeWeightedStatPoints(st, weights, extraPool * poolBoost);
     return st;
   }
 
@@ -3986,13 +4047,14 @@
     const equipSlot = EQUIP_SLOTS[Math.floor(Math.random() * EQUIP_SLOTS.length)];
     const pool = urban[equipSlot];
     const baseName = pool[Math.floor(Math.random() * pool.length)];
-    const qMul = qual === "SSS" ? 3.6 : qual === "SS" ? 2.65 : qual === "S" ? 1.78 : 1.18;
+    const qMul = qual === "SSS" ? 4.9 : qual === "SS" ? 3.55 : qual === "S" ? 2.42 : 1.62;
     const rr = Math.random();
     let weaponArchetype = "phys";
     if (rr < 0.33) weaponArchetype = "phys";
     else if (rr < 0.66) weaponArchetype = "firearm";
     else weaponArchetype = "mag";
-    const roll = (v) => Math.max(1, Math.floor(v * qMul * (0.92 + Math.random() * 0.22)));
+    const slotBoost = equipSlot === "Arma" ? 1.46 : equipSlot === "Cuerpo" ? 1.38 : equipSlot === "Cabeza" ? 1.34 : 1.36;
+    const roll = (v) => Math.max(1, Math.floor(v * qMul * slotBoost * (0.92 + Math.random() * 0.22)));
     let bonus;
     if (equipSlot === "Arma") {
       if (weaponArchetype === "phys") {
@@ -4175,6 +4237,8 @@
           floorConditionForFloor: 0,
           floorAdvanceRule: "free",
           floorBossCleared: true,
+          floor20FinalBossDefeated: false,
+          floor20RewardClaimed: false,
           floorExitKey: true,
           floorRelicFound: true,
           mapPos: "2,2",
@@ -4987,6 +5051,7 @@
   function startCombat() {
     combatPickMode = null;
     combatEnemies = [];
+    let spawnedZahurt = false;
     const isBoss = !!(lotgState && lotgState._combatIsBoss);
     const isMini = !!(lotgState && lotgState._combatIsMiniboss);
     if (lotgState) {
@@ -4994,7 +5059,26 @@
       lotgState._combatIsMiniboss = false;
     }
     if (isBoss) {
-      combatEnemies.push(scaleEnemy(lotgState.floor, true));
+      if ((lotgState && lotgState.floor) === 20) {
+        const zahurt = scaleEnemy(lotgState.floor, true, { finalBoss: true });
+        zahurt.name = "Zahurt";
+        zahurt.tag = "Anomalía final — prueba del piso 20";
+        zahurt.element = "Trueno";
+        zahurt.isFinalBoss = true;
+        zahurt.level = Math.max(24, zahurt.level || 1);
+        zahurt.stats.EN = Math.floor((zahurt.stats.EN || 0) * 1.08);
+        zahurt.stats.VI = Math.floor((zahurt.stats.VI || 0) * 1.06);
+        zahurt.stats.STG = Math.floor((zahurt.stats.STG || 0) * 1.16);
+        zahurt.stats.MA = Math.floor((zahurt.stats.MA || 0) * 1.18);
+        zahurt.stats.DX = Math.floor((zahurt.stats.DX || 0) * 1.12);
+        zahurt.hpMax = Math.floor(zahurt.hpMax * 1.2);
+        zahurt.hp = zahurt.hpMax;
+        zahurt.elementalTraits = { weakTo: ["Hielo"], resistTo: ["Fuego"], nullify: [] };
+        combatEnemies.push(zahurt);
+        spawnedZahurt = true;
+      } else {
+        combatEnemies.push(scaleEnemy(lotgState.floor, true));
+      }
     } else if (isMini) {
       combatEnemies.push(scaleEnemy(lotgState.floor, false, { miniboss: true }));
     } else {
@@ -5002,6 +5086,7 @@
       for (let i = 0; i < pack; i++) combatEnemies.push(scaleEnemy(lotgState.floor, false));
     }
     combatLog = [];
+    if (spawnedZahurt) combatLog.push("¡Aparece Zahurt, la anomalía definitiva del piso 20!");
     skillCdPro = 0;
     combatPhase = "player";
     combatAllyIndex = 0;
@@ -5070,6 +5155,7 @@
     const nKilled = combatEnemies.filter((e) => e).length;
     const wasBoss = combatEnemies.some((e) => e && e.boss);
     const wasMiniboss = combatEnemies.some((e) => e && e.miniboss);
+    const wasFinalBoss = combatEnemies.some((e) => e && e.isFinalBoss);
     if (win && lotgState) snapshotPartyVitalsToPersist();
     if (lotgState && lotgState.combatAllyVitals) delete lotgState.combatAllyVitals;
     combatPhase = "player";
@@ -5090,12 +5176,17 @@
       const soul = Math.floor(soulBase * (1 + (econ.soulPct || 0)));
       normalizeSoulPointsOnState(lotgState);
       lotgState.soul += soul;
-      const xpBase = 48 + lotgState.floor * 14 + Math.floor(streak * 1.1);
-      const xpGain = Math.floor(xpBase * (1 + (econ.xpPct || 0)));
+      const xpBase = 86 + lotgState.floor * 21 + Math.floor(streak * 1.8);
+      const xpGain = Math.floor(xpBase * 1.18 * (1 + (econ.xpPct || 0)));
       combatLog.push("Victoria: +" + zen + " Zen, +" + soul + " Soul Points, +" + xpGain + " EXP.");
       gainXpProtagonist(xpGain);
-      getPartyUnits().forEach((u) => gainXpUnit(u, Math.floor(xpGain * 0.72)));
+      getPartyUnits().forEach((u) => gainXpUnit(u, Math.floor(xpGain * 0.9)));
       if (wasBoss) lotgState.floorBossCleared = true;
+      if (wasFinalBoss) {
+        lotgState.floor20FinalBossDefeated = true;
+        lotgState.floorBossCleared = true;
+        combatLog.push("Victoria absoluta: Zahurt ha sido derrotado.");
+      }
       lotgState.combatsCleared++;
       if (Array.isArray(lotgState.activeSideQuests)) {
         lotgState.activeSideQuests.forEach((q) => {
@@ -5104,7 +5195,37 @@
         });
       }
     } else {
-      if (lotgState) lotgState._pendingMapCellKey = null;
+      if (lotgState) {
+        lotgState._pendingMapCellKey = null;
+        const p = lotgState.protag || {};
+        const party = (getPartyUnits() || [])
+          .map((u) => `${u.name} Nv.${u.level}`)
+          .join(" · ");
+        const tailLog = (combatLog || []).slice(-8);
+        const report =
+          "Resultado de la run (derrota)\n\n" +
+          "Piso alcanzado: " +
+          (lotgState.floor || 1) +
+          "\n" +
+          "Combates ganados: " +
+          (lotgState.combatsCleared || 0) +
+          "\n" +
+          "Doctor: " +
+          (p.name || "—") +
+          " Nv." +
+          (p.level || 1) +
+          "\n" +
+          "Zen acumulado: " +
+          (lotgState.zen || 0) +
+          "\n" +
+          "Soul Points acumulados: " +
+          (lotgState.soul || 0) +
+          "\n" +
+          "Grupo activo: " +
+          (party || "Sin reclutas en grupo") +
+          (tailLog.length ? "\n\nÚltimo registro de combate:\n- " + tailLog.join("\n- ") : "");
+        alert(report);
+      }
       lotgWipe();
       alert("Has caído. La anomalía reclama la run: se pierde progreso, Zen, Soul, unidades y equipo. Vuelves a la pantalla inicial.");
       const gw = document.getElementById("lotgGameWrap");
@@ -5123,6 +5244,9 @@
     }
     playLotgTrack("safe", "Safe Area");
     renderLotgGame();
+    if (win && lotgState && wasFinalBoss && !lotgState.floor20RewardClaimed) {
+      setTimeout(() => openFloor20RewardFlow(), 40);
+    }
   }
 
   function gainXpProtagonist(amt) {
@@ -7300,6 +7424,8 @@
       return;
     }
     const cs = applyEquipToProtag();
+    const pMergedHub = mergeStatsWithEquipSlots((p && p.stats) || emptyStats(), (lotgState && lotgState.equipSlots) || {});
+    const protagStatsLine = STAT_KEYS.map((k) => `${k} ${pMergedHub[k] || 0}`).join(" · ");
     if (p.hpCur > cs.hpMax) p.hpCur = cs.hpMax;
     if (p.spCur > cs.spMax) p.spCur = cs.spMax;
 
@@ -8263,7 +8389,7 @@
             : "";
     const mapHtml = `
       <h3>Exploración — mini mapa</h3>
-      <p class="muted">Avanza a celdas <strong>adyacentes</strong>. <strong>Cada piso</strong> el sector se <strong>reordena al azar</strong> (combates, tiendas, eventos y salida). Las celdas <strong class="lotg-done-inline">moradas</strong> ya se completaron. <strong>Salida ⇊</strong> no se marca en morado. Jefe cada <strong>3 pisos</strong> (💀). Combate en <strong>horda</strong>.</p>
+      <p class="muted">Avanza a celdas <strong>adyacentes</strong>. <strong>Cada piso</strong> el sector se <strong>reordena al azar</strong> (combates, tiendas, eventos y salida). Las celdas <strong class="lotg-done-inline">moradas</strong> ya se completaron. <strong>Salida ⇊</strong> no se marca en morado. Jefe cada <strong>3 pisos</strong> (💀) y <strong>Zahurt</strong> como prueba final en piso 20. Combate en <strong>horda</strong>.</p>
       ${floorExitHint}
       <p class="muted" style="font-size:0.8rem">⚔ combate · 💀 jefe · ? evento · ¤ tienda · ◆ tienda habilidades (Soul) · ❤ regalos · 📜 misión NPC · ♥ descanso · ⇊ salida</p>
       <div class="lotg-map" id="lotgMap"></div>`;
@@ -8429,6 +8555,7 @@
         ${p.passive ? `<p class="muted" style="font-size:0.78rem;margin:0.35rem 0;line-height:1.4"><strong>Pasiva:</strong> ${escapeHtml(p.passive.name)} — ${escapeHtml(p.passive.desc)}</p>` : ""}
         ${p.skillActive ? `<p class="muted" style="font-size:0.78rem;margin:0;line-height:1.4"><strong>Técnica:</strong> ${escapeHtml(p.skillActive.name)} — ${escapeHtml(p.skillActive.desc)}</p>` : ""}
         <div class="lotg-protag-bars">
+          <p class="muted" style="font-size:0.72rem;margin:0 0 0.3rem;line-height:1.35"><strong>Stats actuales:</strong> ${escapeHtml(protagStatsLine)}</p>
           <p class="muted" style="font-size:0.72rem;margin:0 0 0.35rem;line-height:1.35">Stats de combate con equipo: <strong>ATK</strong> ${cs.atkP}/${cs.atkM} · <strong>HP máx.</strong> sube con HP y <strong>VI</strong> · <strong>SP</strong> es maná (sube con SP y <strong>MA</strong>).</p>
           <div class="bar-wrap"><div class="bar-fill" style="width:${(p.hpCur / cs.hpMax) * 100}%"></div></div>
           <div class="muted" style="font-size:0.75rem">HP ${p.hpCur} / ${cs.hpMax} <span style="font-size:0.65rem">(vitalidad)</span></div>
@@ -8778,13 +8905,14 @@
       }
     });
     const fl = Number.isFinite(lotgState.floor) ? lotgState.floor : 1;
-    if (fl % 3 === 0) {
+    if (fl % 3 === 0 || fl === 20) {
       const enemyKeys = contentKeys.filter((k) => lotgState.mapCellTypes[k] === "enemy");
       const candidates = enemyKeys.filter((k) => k !== lotgState.mapExitCoord);
       if (candidates.length) {
         const bk = candidates[Math.floor(Math.random() * candidates.length)];
         if (!lotgState.mapCellMeta[bk]) lotgState.mapCellMeta[bk] = {};
         lotgState.mapCellMeta[bk].boss = true;
+        lotgState.mapCellMeta[bk].finalBoss = fl === 20;
         lotgState.mapCellMeta[bk].miniboss = false;
         lotgState.mapBossCellKey = bk;
       }
@@ -8888,7 +9016,9 @@
             if (meta.boss || meta.miniboss) {
               const ok = confirm(
                 (meta.boss
-                  ? "💀 Jefe de piso — amenaza máxima.\n\n"
+                  ? meta.finalBoss
+                    ? "💀 Zahurt — anomalía final del piso 20.\n\n"
+                    : "💀 Jefe de piso — amenaza máxima.\n\n"
                   : "⚔ Mini-jefe de zona — enemigo reforzado (casilla violeta).\n\n") +
                   "Aceptar: luchar ahora.\nCancelar: posponer (no te mueves de casilla)."
               );
@@ -8966,7 +9096,14 @@
                 alert("Falta la reliquia de registro. Sigue explorando eventos en el mapa.");
               } else {
                 if (lotgState.floor === 20) {
-                  openFloor20RewardFlow();
+                  if (!lotgState.floor20FinalBossDefeated) {
+                    lotgState.mapPos = px + "," + py;
+                    alert("La salida final está sellada. Debes derrotar a Zahurt (💀) para reclamar la recompensa.");
+                  } else if (lotgState.floor20RewardClaimed) {
+                    alert("La recompensa final ya fue reclamada en esta run.");
+                  } else {
+                    openFloor20RewardFlow();
+                  }
                 } else {
                   lotgState.floor++;
                   lotgState.mapCellTypes = {};
@@ -8997,10 +9134,11 @@
       if (lotgState.mapCellMeta && lotgState.mapCellMeta[ex]) {
         delete lotgState.mapCellMeta[ex].miniboss;
         delete lotgState.mapCellMeta[ex].boss;
+        delete lotgState.mapCellMeta[ex].finalBoss;
       }
     }
     const flBoss = lotgState.floor || 1;
-    if (flBoss % 3 === 0) {
+    if (flBoss % 3 === 0 || flBoss === 20) {
       let bossHere = false;
       Object.keys(lotgState.mapCellTypes || {}).forEach((k) => {
         if (lotgState.mapCellTypes[k] !== "enemy") return;
@@ -9015,6 +9153,7 @@
             if (k2 === lotgState.mapExitCoord) continue;
             if (!lotgState.mapCellMeta[k2]) lotgState.mapCellMeta[k2] = {};
             lotgState.mapCellMeta[k2].boss = true;
+            lotgState.mapCellMeta[k2].finalBoss = flBoss === 20;
             lotgState.mapBossCellKey = k2;
             break outerBoss;
           }
